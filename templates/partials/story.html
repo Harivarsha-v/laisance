@@ -1,0 +1,47 @@
+{% load static %}
+{# Scroll story: a pinned full-screen stage behind five chapters. With static/video/atelier.mp4 present, #}
+{# scrolling scrubs the film; without it, the chapter photographs crossfade. See static/js/site.js (story). #}
+<section class="story" data-story aria-label="How a piece is made">
+  <div class="story-stage" aria-hidden="true">
+    {% if has_film %}
+      <video class="story-film" src="{% static 'video/atelier.mp4' %}" poster="{% static 'img/story/cloth.jpg' %}"
+             muted playsinline preload="auto" tabindex="-1"></video>
+    {% endif %}
+    <div class="story-frames">
+      {% for key in story_frames %}
+        <img class="story-frame{% if forloop.first %} is-active{% endif %}" src="{% static 'img/story/'|add:key|add:'.jpg' %}" alt="" decoding="async" {% if not forloop.first %}loading="lazy"{% endif %}>
+      {% endfor %}
+    </div>
+    <div class="story-veil"></div>
+    <div class="story-progress"><span></span></div>
+  </div>
+
+  <div class="story-chapters">
+    <article class="chapter" data-frame="0">
+      <p class="chapter-num">I</p>
+      <h2 class="display h-lg">The cloth</h2>
+      <p>It begins in Biella, where the mills have spun wool for six centuries. We choose each bolt by hand: double-face cashmere, two layers woven as one, so the coat needs no lining at all.</p>
+    </article>
+    <article class="chapter" data-frame="1">
+      <p class="chapter-num">II</p>
+      <h2 class="display h-lg">The leather</h2>
+      <p>From a family tannery in Tuscany, box calfskin is tanned slowly with bark and time. It arrives stiff and pale, and softens to your hand over years, not days.</p>
+    </article>
+    <article class="chapter" data-frame="2">
+      <p class="chapter-num">III</p>
+      <h2 class="display h-lg">The hand</h2>
+      <p>Every collar is shaped over the knee and every buttonhole sewn by hand, some forty minutes each. A single coat passes through eleven pairs of hands before it is finished.</p>
+    </article>
+    <article class="chapter" data-frame="3">
+      <p class="chapter-num">IV</p>
+      <h2 class="display h-lg">The atelier</h2>
+      <p>Behind the salon, our workroom keeps the patterns of every piece we have made. Nothing is cut by machine, and nothing leaves until it falls exactly as it should.</p>
+    </article>
+    <article class="chapter" data-frame="4">
+      <p class="chapter-num">V</p>
+      <h2 class="display h-lg">Paris</h2>
+      <p>Made in small numbers, in the house where it was drawn. Then it is yours, to be worn for decades and still feel effortless.</p>
+      <a class="link-u" href="{% url 'shop' 'women' %}">Discover the collection <span class="arrow">→</span></a>
+    </article>
+  </div>
+</section>

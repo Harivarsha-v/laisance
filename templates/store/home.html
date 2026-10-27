@@ -28,24 +28,7 @@
   </div>
 </section>
 
-<section class="materials wrap" aria-label="Our materials">
-  <ol>
-    <li><span>Double-face cashmere</span><span>Biella</span></li>
-    <li><span>Silk charmeuse</span><span>Lyon</span></li>
-    <li><span>Linen voile</span><span>Normandy</span></li>
-    <li><span>Box calfskin</span><span>Tuscany</span></li>
-    <li><span>Finished by hand</span><span>Paris</span></li>
-  </ol>
-</section>
-
-<section class="wrap credo">
-  <aside class="credo-side reveal">
-    <p class="eyebrow">La Maison</p>
-    <p class="credo-note">Each season we release only a handful of pieces, made in limited numbers by the ateliers that have mastered them. Our private stylist, an AI that lives on our own servers, knows every one of them.</p>
-    <a class="link-u" href="{% url 'stylist' %}">Meet the stylist <span class="arrow">→</span></a>
-  </aside>
-  <p class="credo-text reveal">Ease is the rarest luxury. We cut cloth to follow the body, never to hold it, so that a coat, a shirt, a single silk scarf may be worn for decades and still feel effortless.</p>
-</section>
+{% include "partials/story.html" %}
 
 <section class="wrap">
   <div class="section-head">

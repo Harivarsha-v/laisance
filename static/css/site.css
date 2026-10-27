@@ -764,3 +764,44 @@ body { font-size: 15px; line-height: 1.65; letter-spacing: .005em; }   /* Body *
   .hero { grid-template-columns: 1fr; }
   .plate-note { flex-direction: column; gap: 2px; font-size: 12px; }
 }
+
+/* ---- product photography ---- */
+.art--photo { background: var(--paper-2); }
+.art--photo img { width: 100%; height: 100%; object-fit: cover; }
+.art--photo::before { display: none; }
+.gallery .art--detail.art--photo img { transform: scale(1.8); transform-origin: 50% 35%; }
+.card:hover .art--photo img { transform: scale(1.03); }
+
+/* ==========================================================================
+   Scroll story: pinned stage, chapters scroll over it
+   ========================================================================== */
+.story { position: relative; margin-top: clamp(56px, 7vw, 112px); background: #14110e; color: #f5f1ea; }
+.story-stage { position: sticky; top: 0; height: 100svh; overflow: hidden; }
+.story-film, .story-frame { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.story-frame { opacity: 0; transform: scale(1.08); transition: opacity 1.1s var(--ease), transform 6s linear; }
+.story-frame.is-active { opacity: 1; transform: scale(1); }
+.story.has-film .story-frames { display: none; }
+.story-veil { position: absolute; inset: 0; background:
+  linear-gradient(90deg, rgba(14, 11, 8, .72) 0%, rgba(14, 11, 8, .35) 45%, rgba(14, 11, 8, 0) 75%),
+  linear-gradient(0deg, rgba(14, 11, 8, .45), transparent 40%); }
+.story-progress { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 28px; height: 1px; background: rgba(245, 241, 234, .22); }
+.story-progress span { display: block; height: 100%; background: #f5f1ea; transform-origin: left; transform: scaleX(var(--p, 0)); }
+.story-chapters { position: relative; margin-top: -100svh; }
+.chapter { min-height: 100svh; display: grid; align-content: center; gap: 18px; padding: 0 var(--gutter); max-width: calc(34rem + var(--gutter) * 2); }
+.chapter .display { color: #f5f1ea; margin: 0; }
+.chapter p { margin: 0; font: 400 17px/1.7 var(--sans); color: rgba(245, 241, 234, .86); max-width: 36ch; }
+.chapter .chapter-num { font: italic 400 20px/1 var(--serif); color: rgba(245, 241, 234, .7); }
+.chapter .link-u { color: #f5f1ea; justify-self: start; margin-top: 8px; }
+/* chapter text rises in as it reaches the middle of the screen */
+.chapter > * { opacity: 0; transform: translateY(18px); transition: opacity var(--dur-crawl) var(--ease), transform var(--dur-crawl) var(--ease-out); }
+.chapter.is-in > * { opacity: 1; transform: none; }
+.chapter.is-in > :nth-child(2) { transition-delay: .08s; } .chapter.is-in > :nth-child(3) { transition-delay: .16s; } .chapter.is-in > :nth-child(4) { transition-delay: .24s; }
+.no-js .chapter > * { opacity: 1; transform: none; }
+@media (max-width: 860px) {
+  .story-veil { background: linear-gradient(0deg, rgba(14, 11, 8, .82) 0%, rgba(14, 11, 8, .4) 55%, rgba(14, 11, 8, .15) 100%); }
+  .chapter { align-content: end; padding-bottom: 96px; }
+  .chapter p { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .story-frame { transition: opacity .2s; transform: none !important; }
+}

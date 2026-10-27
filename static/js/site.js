@@ -366,4 +366,41 @@
     $$("[data-ask]").forEach((b) => b.addEventListener("click", () => { open(); if (b.dataset.ask) ask(b.dataset.ask); }));
     window.askAssistant = (q) => { open(); if (q) ask(q); };
   }
+
+  /* ---- scroll story: chapters reveal; the film (if present) scrubs with scroll, else photos crossfade ---- */
+  const story = $("[data-story]");
+  if (story) {
+    const film = $(".story-film", story), frames = $$(".story-frame", story), chapters = $$(".chapter", story);
+    const bar = $(".story-progress", story);
+    let filmReady = false, target = 0, ticking = false;
+    if (film) {
+      const ready = () => { filmReady = film.duration > 0; story.classList.toggle("has-film", filmReady); film.pause(); };
+      film.addEventListener("loadedmetadata", ready);
+      if (film.readyState >= 1) ready();
+    }
+    const progress = () => {
+      const r = story.getBoundingClientRect(), span = r.height - innerHeight;
+      return span > 0 ? Math.min(1, Math.max(0, -r.top / span)) : 0;
+    };
+    const render = () => {
+      ticking = false;
+      const p = progress();
+      bar.style.setProperty("--p", p.toFixed(4));
+      if (filmReady) {
+        target = p * (film.duration - 0.05);
+        if (Math.abs(film.currentTime - target) > 1 / 30) film.currentTime = target;  // scrub, don't play
+      }
+    };
+    addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(render); } }, { passive: true });
+    addEventListener("resize", render);
+    render();
+    // the chapter crossing the middle of the screen sets the active photograph
+    const chapterIO = new IntersectionObserver((entries) => entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add("is-in");
+      const i = +e.target.dataset.frame;
+      frames.forEach((f, k) => f.classList.toggle("is-active", k === i));
+    }), { rootMargin: "-45% 0px -45% 0px" });
+    chapters.forEach((c) => chapterIO.observe(c));
+  }
 })();

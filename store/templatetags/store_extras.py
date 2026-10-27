@@ -71,13 +71,29 @@ def _ink_for(hex_color):
     return "#1d1b18" if luminance > 140 else "#f4efe6"
 
 
+def _house_photo(slug):
+    """Static URL of the product's photo in static/img/products/, if there is one."""
+    from django.conf import settings
+    from django.templatetags.static import static
+
+    if (settings.BASE_DIR / "static" / "img" / "products" / f"{slug}.jpg").exists():
+        return static(f"img/products/{slug}.jpg")
+    return None
+
+
 @register.simple_tag
 def garment(product, css_class="", label=True, color=None):
     """Product artwork: the uploaded photo if there is one, otherwise the illustration (optionally recoloured)."""
-    if product.image:
+    if product.image:  # a photo uploaded in the admin wins
         return format_html(
-            '<figure class="art {}"><img src="{}" alt="{}" loading="lazy"></figure>',
+            '<figure class="art art--photo {}"><img src="{}" alt="{}" loading="lazy"></figure>',
             css_class, product.image.url, product.name,
+        )
+    photo = _house_photo(product.slug)
+    if photo:  # free-licensed photography shipped with the site (see store/photo_credits.py)
+        return format_html(
+            '<figure class="art art--photo {}"><img src="{}" alt="{}" loading="lazy" decoding="async"></figure>',
+            css_class, photo, product.name,
         )
     swatch = COLOR_HEX.get((color or "").lower(), product.swatch)
     ink = _ink_for(swatch)

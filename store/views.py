@@ -38,6 +38,9 @@ def home(request):
         "featured_women": products.filter(is_featured=True, department=Department.WOMEN)[:4],
         "featured_men": products.filter(is_featured=True, department=Department.MEN)[:4],
         "starters": STARTERS,
+        # scroll story: the film is optional; drop static/video/atelier.mp4 in and it scrubs with scroll
+        "has_film": (settings.BASE_DIR / "static" / "video" / "atelier.mp4").exists(),
+        "story_frames": ["cloth", "leather", "stitch", "atelier", "paris"],
         "ld": {
             "@context": "https://schema.org", "@type": "Organization", "name": settings.BRAND_NAME,
             "url": request.build_absolute_uri("/"),
