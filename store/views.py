@@ -27,7 +27,7 @@ def home(request):
     products = Product.objects.select_related("category")
     hero = [products.filter(category__slug=slug, is_featured=True).first() for slug in ("coats", "dresses", "blazers")]
     hero = [p for p in hero if p]
-    shown = {hero[0].pk} if hero else set()  # each piece appears once on the page
+    shown = {p.pk for p in hero[:2]}  # the two hero plates don't reappear lower down
     rest = products.exclude(pk__in=shown)
     return render(request, "store/home.html", {
         "hero": hero,

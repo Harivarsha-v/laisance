@@ -18,12 +18,14 @@
       <a href="{% url 'stylist' %}">Private styling</a>
     </nav>
   </div>
-  {% with plate=hero.0 %}{% if plate %}
-  <a class="hero-plate" href="{{ plate.get_absolute_url }}">
-    {% garment plate css_class="art--plate" %}
-    <p class="plate-note"><span>{{ plate.name }}</span><span>{{ plate.price|money }}</span></p>
-  </a>
-  {% endif %}{% endwith %}
+  <div class="hero-plates">
+    {% for plate in hero|slice:":2" %}
+    <a class="hero-plate" href="{{ plate.get_absolute_url }}">
+      {% garment plate css_class="art--plate" %}
+      <p class="plate-note"><span>{{ plate.name }}</span><span>{{ plate.price|money }}</span></p>
+    </a>
+    {% endfor %}
+  </div>
 </section>
 
 <section class="materials wrap" aria-label="Our materials">
@@ -36,9 +38,13 @@
   </ol>
 </section>
 
-<section class="section wrap credo">
+<section class="wrap credo">
+  <aside class="credo-side reveal">
+    <p class="eyebrow">La Maison</p>
+    <p class="credo-note">Each season we release only a handful of pieces, made in limited numbers by the ateliers that have mastered them. Our private stylist, an AI that lives on our own servers, knows every one of them.</p>
+    <a class="link-u" href="{% url 'stylist' %}">Meet the stylist <span class="arrow">→</span></a>
+  </aside>
   <p class="credo-text reveal">Ease is the rarest luxury. We cut cloth to follow the body, never to hold it, so that a coat, a shirt, a single silk scarf may be worn for decades and still feel effortless.</p>
-  <p class="credo-note reveal">Each season we release only a handful of pieces, made in limited numbers by the ateliers that have mastered them. Our private stylist, an AI that lives on our own servers, knows every one of them.</p>
 </section>
 
 <section class="wrap">
