@@ -229,7 +229,6 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .footer li a:hover { color: var(--ink); }
 .newsletter { display: flex; border-bottom: 1px solid var(--ink); max-width: 420px; margin-top: 22px; }
 .newsletter input { flex: 1; border: 0; background: none; padding: 12px 0; outline: none; min-width: 0; }
-.footer-mark { font: 400 clamp(80px, 20vw, 340px)/.8 var(--serif); letter-spacing: .08em; text-align: center; margin: clamp(60px, 8vw, 120px) 0 24px; color: var(--paper-3); user-select: none; }
 .footer-base { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 20px; }
 
 /* ---------- shop ---------- */
@@ -545,8 +544,6 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 
 /* hero line: a short serif lead over a quiet sans line, separated by a hairline */
 .hero-lede { max-width: 25rem; padding-top: 18px; border-top: 1px solid var(--line-strong); }
-.hero-lede-lead { margin: 0; font: 400 clamp(26px, 2.3vw, 34px)/1.1 var(--serif); letter-spacing: -.005em; }
-.hero-lede-lead em { font-style: italic; }
 .hero-lede-body { margin: 12px 0 0; font: 400 13px/1.7 var(--sans); letter-spacing: .02em; color: var(--ink-2); max-width: 34ch; }
 
 /* 44px touch targets for colour swatches without enlarging the dot */
@@ -600,7 +597,6 @@ body { font-size: 15px; line-height: 1.65; letter-spacing: .005em; }   /* Body *
   min-height: auto; align-items: end; }
 .hero-copy { padding: 0 0 clamp(8px, 2vw, 24px); gap: clamp(28px, 4vw, 56px); justify-content: flex-end; }
 .hero-season { margin: 0; font: 500 11px/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--ink-2); }
-.hero-season span { font: italic 400 15px/1 var(--serif); letter-spacing: .04em; text-transform: none; margin-left: .4em; }
 .hero-title { font-size: clamp(56px, 7vw, 112px); line-height: .98; letter-spacing: -.02em; margin: 0; animation: settle var(--dur-crawl) var(--ease-out) both; }
 .hero-index { display: grid; gap: 4px; max-width: 25rem; }
 .hero-index a { display: flex; gap: 16px; align-items: baseline; font: 400 21px/1.35 var(--serif); }
@@ -625,7 +621,6 @@ body { font-size: 15px; line-height: 1.65; letter-spacing: .005em; }   /* Body *
 /* credo: one paragraph, set like the first page of a book */
 .credo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr); gap: clamp(28px, 5vw, 96px); }
 .credo-text { grid-column: 2; margin: 0; font: 400 clamp(24px, 2.4vw, 38px)/1.32 var(--serif); letter-spacing: -.01em; max-width: 30ch; text-wrap: pretty; }
-.dropcap { float: left; font-size: 3.4em; line-height: .78; margin: .06em .08em 0 0; font-style: italic; }
 .credo-note { grid-column: 2; margin: 28px 0 0; max-width: 46ch; color: var(--ink-2); }
 
 /* cards: name, material, price, nothing else */
@@ -688,7 +683,6 @@ body { font-size: 15px; line-height: 1.65; letter-spacing: .005em; }   /* Body *
 .concierge-panel { width: min(400px, calc(100dvw - 28px)); }
 /* Bodoni is wider than the old face: size the footer wordmark to fit any screen */
 .footer { overflow: hidden; }
-.footer-mark { font-size: clamp(48px, 14.5vw, 260px); letter-spacing: .04em; white-space: nowrap; }
 
 /* illustration sizing (restored) */
 .art--detail svg { transform: scale(2.1) translate(4%, 14%); }
