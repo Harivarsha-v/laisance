@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% block robots %}noindex, follow{% endblock %}
 {% block title %}Create an account · {{ BRAND_NAME }}{% endblock %}
 
 {% block content %}
@@ -9,9 +10,9 @@
     {% csrf_token %}
     {% for field in form %}
       <div class="float">
-        <input type="{{ field.field.widget.input_type }}" name="{{ field.html_name }}" id="{{ field.id_for_label }}" value="{{ field.value|default_if_none:'' }}" placeholder=" " {% if field.field.required %}required{% endif %}>
+        <input type="{{ field.field.widget.input_type }}" name="{{ field.html_name }}" id="{{ field.id_for_label }}" {% if field.field.widget.input_type != "password" %}value="{{ field.value|default_if_none:'' }}"{% endif %} placeholder=" " {% if field.field.required %}required{% endif %} {% if field.errors %}aria-invalid="true" aria-describedby="{{ field.id_for_label }}-error"{% endif %}>
         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {{ field.errors }}
+        {% if field.errors %}<ul class="errorlist" id="{{ field.id_for_label }}-error">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
       </div>
     {% endfor %}
     <button class="btn btn--block" type="submit"><span>Create account</span></button>

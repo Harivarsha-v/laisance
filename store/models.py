@@ -1,9 +1,25 @@
 from decimal import Decimal
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
+
+
+# magic bytes for the image types we accept, so a renamed script can't pass as a .jpg
+IMAGE_SIGNATURES = (b"\xff\xd8\xff", b"\x89PNG\r\n\x1a\n", b"RIFF")
+MAX_IMAGE_BYTES = 5 * 1024 * 1024
+
+
+def validate_image_upload(file):
+    if file.size > MAX_IMAGE_BYTES:
+        raise ValidationError("Images must be 5 MB or smaller.")
+    head = file.read(12)
+    file.seek(0)
+    if not head.startswith(IMAGE_SIGNATURES) or (head.startswith(b"RIFF") and head[8:12] != b"WEBP"):
+        raise ValidationError("Upload a JPEG, PNG or WebP image.")
 
 
 class Department(models.TextChoices):
@@ -66,7 +82,8 @@ class Product(models.Model):
     style = models.CharField(max_length=20, choices=Style.choices, default=Style.CASUAL)
     season = models.CharField(max_length=20, choices=Season.choices, default=Season.ALL)
     swatch = models.CharField(max_length=7, default="#d9d4cc", help_text="Hex colour for the placeholder image")
-    image = models.FileField(upload_to="products/", blank=True)
+    image = models.FileField(upload_to="products/", blank=True, validators=[
+        FileExtensionValidator(["jpg", "jpeg", "png", "webp"]), validate_image_upload])
     is_new = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
     is_limited = models.BooleanField(default=False, help_text="Limited edition: one per client (error LA-470 if exceeded)")

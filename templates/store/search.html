@@ -1,15 +1,16 @@
 {% extends "base.html" %}
+{% block robots %}noindex, follow{% endblock %}
 {% block title %}{% if q %}“{{ q }}” · {% endif %}Search · {{ BRAND_NAME }}{% endblock %}
 
 {% block content %}
 <header class="page-head" style="grid-template-columns:1fr">
   <p class="eyebrow"><span class="spark"></span>&nbsp; AI search</p>
-  <form class="search-form" action="{% url 'search' %}" method="get" style="margin-top:12px">
+  <form class="search-form" role="search" action="{% url 'search' %}" method="get" style="margin-top:12px">
     <input type="search" name="q" value="{{ q }}" placeholder="Describe what you're looking for…" aria-label="Search">
     <button class="link-u" type="submit">Search <span class="arrow">→</span></button>
   </form>
   {% if result %}
-    <div class="understood">
+    <div class="understood" aria-live="polite">
       {% if result.intent.chips %}
         <span class="eyebrow">Understood</span>
         {% for c in result.intent.chips %}<span class="pill">{{ c }}</span>{% endfor %}

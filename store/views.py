@@ -35,6 +35,11 @@ def home(request):
         "featured_women": products.filter(is_featured=True, department=Department.WOMEN)[:4],
         "featured_men": products.filter(is_featured=True, department=Department.MEN)[:4],
         "starters": STARTERS,
+        "ld": {
+            "@context": "https://schema.org", "@type": "Organization", "name": settings.BRAND_NAME,
+            "url": request.build_absolute_uri("/"),
+            "address": {"@type": "PostalAddress", "addressLocality": "Paris", "addressCountry": "FR"},
+        },
     })
 
 
@@ -65,7 +70,29 @@ def product_detail(request, slug):
         .exclude(pk=product.pk)
         .select_related("category")[:4]
     )
+    url = request.build_absolute_uri(product.get_absolute_url())
+    dept_url = request.build_absolute_uri(f"/{product.department}/")
+    ld = [
+        {
+            "@context": "https://schema.org", "@type": "Product", "name": product.name,
+            "description": product.description, "material": product.material, "color": product.colors,
+            "category": product.category.name, "sku": f"LA-{product.pk:05d}",
+            "brand": {"@type": "Brand", "name": settings.BRAND_NAME},
+            "offers": {"@type": "Offer", "price": f"{product.price:.2f}", "priceCurrency": "USD",
+                       "availability": "https://schema.org/LimitedAvailability" if product.is_limited else "https://schema.org/InStock",
+                       "url": url},
+        },
+        {
+            "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": product.get_department_display(), "item": dept_url},
+                {"@type": "ListItem", "position": 2, "name": product.category.name,
+                 "item": f"{dept_url}{product.category.slug}/"},
+                {"@type": "ListItem", "position": 3, "name": product.name, "item": url},
+            ],
+        },
+    ]
     return render(request, "store/product.html", {
+        "ld": ld,
         "product": product,
         "look": complete_the_look(product),
         "similar": similar,
@@ -145,6 +172,14 @@ def _wants_json(request):
     return request.headers.get("x-requested-with") == "fetch"
 
 
+def _quantity(raw):
+    """Posted quantity as an int in 1..10; junk or negatives fall back to 1."""
+    try:
+        return max(1, min(int(raw), 10))
+    except (TypeError, ValueError):
+        return 1
+
+
 def _limited_in_cart(cart, product):
     return any(k.split("|")[0] == str(product.id) for k in cart.data)
 
@@ -172,7 +207,7 @@ def cart_add(request, product_id):
             return resp
         messages.error(request, f"{msg} (LA-470)")
         return redirect(product)
-    cart.add(product, size, color, 1 if product.is_limited else int(request.POST.get("quantity", 1) or 1))
+    cart.add(product, size, color, 1 if product.is_limited else _quantity(request.POST.get("quantity")))
     if _wants_json(request):
         return JsonResponse({"count": len(cart), "message": f"{product.name} added to your bag"})
     messages.success(request, f"{product.name} added to your bag.")
@@ -201,7 +236,7 @@ def cart_add_look(request):
 
 
 @require_POST
-def cart_update(request):
+def cart_update(request):  # quantity <= 0 removes the line; Cart caps at 10
     cart = Cart(request)
     key = request.POST.get("key", "")
     if request.POST.get("action") == "remove":

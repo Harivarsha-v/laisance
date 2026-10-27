@@ -2,6 +2,10 @@ from django.contrib.auth import views as auth_views
 from django.urls import path
 
 from . import views, views_care
+from .ratelimit import rate_limited
+
+# brute-force protection: 8 sign-in / sign-up attempts per minute per IP
+login_view = rate_limited("login", per_minute=8, html=True, methods=("POST",))(auth_views.LoginView.as_view())
 
 urlpatterns = [
     path("", views.home, name="home"),
@@ -18,13 +22,13 @@ urlpatterns = [
     path("checkout/", views.checkout, name="checkout"),
     path("order/<int:pk>/", views.order_success, name="order_success"),
     path("account/", views.account, name="account"),
-    path("signup/", views.signup, name="signup"),
-    path("login/", auth_views.LoginView.as_view(), name="login"),
+    path("signup/", rate_limited("signup", per_minute=8, html=True, methods=("POST",))(views.signup), name="signup"),
+    path("login/", login_view, name="login"),
     # client care
     path("help/", views_care.faq, name="faq"),
     path("help/error-codes/", views_care.error_codes, name="error_codes"),
     path("help/error-codes/<str:code>/preview/", views_care.error_preview, name="error_preview"),
-    path("contact/", views_care.contact, name="contact"),
+    path("contact/", rate_limited("contact", per_minute=5, html=True, methods=("POST",))(views_care.contact), name="contact"),
     path("currency/", views_care.set_currency, name="set_currency"),
     path("api/assistant/", views_care.assistant_api, name="assistant_api"),
     path("api/assistant/feedback/", views_care.assistant_feedback, name="assistant_feedback"),

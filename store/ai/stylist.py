@@ -12,7 +12,6 @@ import random
 from django.utils.html import escape
 
 from ..currency import format_price
-from ..models import Product
 from .harmony import best_color, color_harmony, season_compat, style_compat
 from .intent import merge, parse
 from .lexicon import OCCASIONS
@@ -174,7 +173,7 @@ class Stylist:
                         continue
                     return None
 
-            def score(p):
+            def score(p, slot=slot):  # bind this iteration's slot
                 s = index.similarity(qvec, p.id) * 1.5 if qvec else 0
                 if p.style in occ["styles"]:
                     s += 1.0 if p.style == occ["styles"][0] else 0.6
@@ -209,7 +208,7 @@ class Stylist:
         rng = random.Random(f"{intent.occasion}-{variant}-{len(look)}")
         occ_label = OCCASIONS[intent.occasion]["label"]
         parts = []
-        for i, item in enumerate(look):
+        for item in look:
             p, slot = item["product"], item["slot"]
             phrase = rng.choice(LINKERS[slot]).format(name=f"<strong>{escape(p.name)}</strong>", color=_fmt_color(item["color"]))
             parts.append(phrase)

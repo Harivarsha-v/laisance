@@ -1,10 +1,12 @@
 {% extends "base.html" %}
+{% block robots %}noindex, follow{% endblock %}
 {% block title %}Sign in · {{ BRAND_NAME }}{% endblock %}
 
 {% block content %}
 <div class="narrow">
   <p class="eyebrow">Welcome back</p>
-  <h1 class="display h-lg" style="margin:14px 0 40px">Sign <em>in</em></h1>
+  <h1 class="display h-lg" style="margin:14px 0 18px">Sign <em>in</em></h1>
+  <p class="muted" style="margin:0 0 36px">{% if next %}Please sign in to continue. Your account keeps your orders and details in one place.{% else %}Sign in to see your orders and check out faster.{% endif %}</p>
   <form method="post">
     {% csrf_token %}
     {% if form.non_field_errors %}<ul class="errorlist" style="margin-bottom:20px">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}

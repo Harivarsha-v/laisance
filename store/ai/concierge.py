@@ -11,6 +11,8 @@ import math
 import re
 from collections import Counter
 
+from urllib.parse import urlencode
+
 from django.urls import reverse
 from django.utils.html import escape
 
@@ -89,7 +91,7 @@ class FaqIndex:
         q = self._norm({t: w * self.idf[t] for t, w in expand(faq_tokens(text)).items() if t in self.idf})
         if not q:
             return []
-        scored = [(sum(w * vec.get(t, 0) for t, w in q.items()), f) for vec, f in zip(self.vectors, self.faqs)]
+        scored = [(sum(w * vec.get(t, 0) for t, w in q.items()), f) for vec, f in zip(self.vectors, self.faqs, strict=True)]
         return sorted([s for s in scored if s[0] > 0], key=lambda s: -s[0])[:k]
 
 
@@ -152,7 +154,7 @@ class Concierge:
 
         intent = parse(message)
         if intent.occasion or intent.categories:
-            url = f"{reverse('stylist')}?q={escape(message)}"
+            url = escape(f"{reverse('stylist')}?{urlencode({'q': message})}")
             return self._r("stylist", _p("That is a question for our stylist, who can compose a complete look from the "
                                          f"collection. <a href=\"{url}\">Continue with the stylist →</a>"),
                            matched="stylist")

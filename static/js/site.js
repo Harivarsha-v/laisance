@@ -19,7 +19,11 @@
   /* ---- toast + bag count ---- */
   function toast(message, link) {
     let host = $(".flash");
-    if (!host) { host = document.createElement("div"); host.className = "flash"; document.body.append(host); }
+    if (!host) {
+      host = document.createElement("div"); host.className = "flash";
+      host.setAttribute("role", "status"); host.setAttribute("aria-live", "polite");
+      document.body.append(host);
+    }
     const el = document.createElement("div");
     el.className = "toast";
     el.innerHTML = esc(message) + (link ? `<a href="${link.href}">${esc(link.label)}</a>` : "");
@@ -41,11 +45,28 @@
     new IntersectionObserver(([e]) => header.classList.toggle("is-scrolled", !e.isIntersecting)).observe(announce);
   }
   const menuBtn = $(".menu-btn");
-  menuBtn && menuBtn.addEventListener("click", () => {
-    const open = $(".nav").classList.toggle("is-open");
+  const setMenu = (open) => {
+    $(".nav").classList.toggle("is-open", open);
     menuBtn.setAttribute("aria-expanded", open);
     menuBtn.textContent = open ? "Close" : "Menu";
-  });
+    if (open) $(".nav a").focus();
+  };
+  if (menuBtn) {
+    menuBtn.addEventListener("click", () => setMenu(!$(".nav").classList.contains("is-open")));
+    addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && $(".nav").classList.contains("is-open")) { setMenu(false); menuBtn.focus(); }
+    });
+  }
+
+  // keep Tab inside an open modal (WCAG 2.1.2 / 2.4.3); Escape still closes it
+  const trapFocus = (container, e) => {
+    if (e.key !== "Tab") return;
+    const items = $$("a[href], button:not([disabled]), input, select, textarea", container).filter((el) => el.offsetParent !== null);
+    if (!items.length) return;
+    const first = items[0], last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  };
 
   /* ---- headline word reveal ---- */
   $$(".split-words").forEach((el) => {
@@ -79,8 +100,17 @@
   const panel = $(".search-panel");
   if (panel) {
     const input = $("input", panel), out = $(".suggest", panel), chips = $(".understood", panel);
-    const open = () => { panel.classList.add("is-open"); document.body.style.overflow = "hidden"; setTimeout(() => input.focus(), 60); };
-    const close = () => { panel.classList.remove("is-open"); document.body.style.overflow = ""; };
+    let opener = null;
+    const open = () => {
+      opener = document.activeElement;
+      panel.classList.add("is-open"); document.body.style.overflow = "hidden"; setTimeout(() => input.focus(), 60);
+    };
+    const close = () => {
+      if (!panel.classList.contains("is-open")) return;
+      panel.classList.remove("is-open"); document.body.style.overflow = "";
+      if (opener && opener.focus) opener.focus();
+    };
+    panel.addEventListener("keydown", (e) => trapFocus(panel, e));
     $$("[data-search-open]").forEach((b) => b.addEventListener("click", (e) => { e.preventDefault(); open(); }));
     $$("[data-search-close]", panel).forEach((b) => b.addEventListener("click", close));
     addEventListener("keydown", (e) => {
@@ -94,8 +124,17 @@
       timer = setTimeout(async () => {
         const q = input.value.trim(), mine = ++seq;
         if (q.length < 2) { out.innerHTML = ""; chips.innerHTML = ""; return; }
-        const data = await fetch(`/api/search/?q=${encodeURIComponent(q)}`).then((r) => r.json());
+        out.setAttribute("aria-busy", "true");
+        chips.innerHTML = `<span class="eyebrow muted">Searching the collection…</span>`;
+        let data;
+        try {
+          data = await fetch(`/api/search/?q=${encodeURIComponent(q)}`).then((r) => r.json());
+        } catch (_) {
+          data = { error: "Search is resting for a moment. Press Enter to search the full page instead." };
+        }
         if (mine !== seq) return;
+        out.removeAttribute("aria-busy");
+        if (data.error) { chips.innerHTML = ""; out.innerHTML = `<p class="lede">${esc(data.error)}</p>`; return; }
         chips.innerHTML = data.understood.length
           ? `<span class="eyebrow">Understood</span>` + data.understood.map((c, i) => `<span class="pill" style="animation-delay:${i * 50}ms">${esc(c)}</span>`).join("")
           : "";
@@ -120,6 +159,8 @@
       } finally { btn && (btn.disabled = false); }
     });
   });
+
+  $$("select[data-autosubmit]").forEach((s) => s.addEventListener("change", () => s.form.submit()));
 
   /* ---- newsletter (front-end only) ---- */
   $$("[data-newsletter]").forEach((f) => f.addEventListener("submit", (e) => {
@@ -189,24 +230,35 @@
       input.value = "";
       const typing = addMsg("ai", `<div class="typing"><i></i><i></i><i></i></div>`);
       const started = Date.now();
-      const res = await fetch("/api/stylist/", {
-        method: "POST", body: JSON.stringify({ message: text }),
-        headers: { "Content-Type": "application/json", "X-CSRFToken": csrf(), "X-Requested-With": "fetch" },
-      });
-      const data = await res.json();
+      let data;
+      try {
+        const res = await fetch("/api/stylist/", {
+          method: "POST", body: JSON.stringify({ message: text }),
+          headers: { "Content-Type": "application/json", "X-CSRFToken": csrf(), "X-Requested-With": "fetch" },
+        });
+        data = await res.json();
+      } catch (_) {
+        data = { error: "I couldn't reach the atelier just now. Please try again in a moment.", code: "503" };
+      }
       await new Promise((r) => setTimeout(r, Math.max(0, 650 - (Date.now() - started)))); // let the dots breathe
       typing.remove();
-      if (data.error) { addMsg("ai", `<div class="txt">${esc(data.error)}</div>`); return; }
+      if (data.error) {
+        addMsg("ai", `<div class="txt">${esc(data.error)}</div><div class="understood"><span class="pill">Error ${esc(data.code || "")}</span></div>`);
+        setSuggestions(["Try again", ...JSON.parse(chat.dataset.starters).slice(0, 2)]);
+        if (data.code !== "429") lastFailed = text;
+        return;
+      }
       const understood = data.understood.length ? `<div class="understood">${data.understood.map((c) => `<span class="pill">${esc(c)}</span>`).join("")}</div>` : "";
       // stylist text is built server-side from escaped product names, so it is safe to render
       addMsg("ai", `<div class="txt">${data.text}</div>${understood}${renderLook(data.look)}`);
       setSuggestions(data.suggestions);
     };
 
+    let lastFailed = "";
     form.addEventListener("submit", (e) => { e.preventDefault(); send(input.value); });
     chat.addEventListener("click", async (e) => {
       const chip = e.target.closest(".chip");
-      if (chip) { send(chip.textContent); return; }
+      if (chip) { send(chip.textContent === "Try again" && lastFailed ? lastFailed : chip.textContent); return; }
       const addBtn = e.target.closest("[data-add-look]");
       if (addBtn) {
         addBtn.disabled = true;
@@ -242,6 +294,7 @@
     const close = () => {
       cc.classList.remove("is-open");
       toggle.setAttribute("aria-expanded", "false");
+      toggle.focus();
       setTimeout(() => { if (!cc.classList.contains("is-open")) panel.hidden = true; }, 350);
     };
     toggle.addEventListener("click", () => (cc.classList.contains("is-open") ? close() : open()));

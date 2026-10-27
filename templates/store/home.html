@@ -2,6 +2,7 @@
 {% load store_extras %}
 {% block title %}{{ BRAND_NAME }} · Maison de Couture, Paris{% endblock %}
 {% block header_class %}{% endblock %}
+{% block structured_data %}{{ ld|ld_json }}{% endblock %}
 
 {% block content %}
 <section class="hero">
@@ -9,7 +10,10 @@
     <p class="eyebrow">Collection Automne–Hiver &nbsp;·&nbsp; Paris</p>
     <h1 class="display h-xl split-words">The art<br>of <em>ease.</em></h1>
     <div class="hero-foot">
-      <p class="lede">Cashmere that moves as you do. Tailoring that forgets it is tailored. A small collection, made slowly, for a life lived gracefully.</p>
+      <div class="hero-lede">
+        <p class="hero-lede-lead">Dressed, <em>without effort.</em></p>
+        <p class="hero-lede-body">Silk, cashmere and wool, cut in Paris to fall, to breathe, and to follow every gesture.</p>
+      </div>
       <nav class="hero-index" aria-label="Shop">
         <a href="{% url 'shop' 'women' %}"><span>01</span>Women</a>
         <a href="{% url 'shop' 'men' %}"><span>02</span>Men</a>

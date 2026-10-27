@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 {% load store_extras %}
 {% block title %}{{ product.name }} · {{ BRAND_NAME }}{% endblock %}
-{% block description %}{{ product.description|truncatechars:150 }}{% endblock %}
+{% block description %}{{ product.description|truncatechars:155 }}{% endblock %}
+{% block og_type %}product{% endblock %}
+{% block og_title %}{{ product.name }} · {{ BRAND_NAME }}{% endblock %}
+{% block og_description %}{{ product.description|truncatechars:155 }}{% endblock %}
+{% block structured_data %}{{ ld|ld_json }}{% endblock %}
 
 {% block content %}
 <div class="pdp">
@@ -28,9 +32,9 @@
     <form method="post" action="{% url 'cart_add' product.id %}" data-ajax-cart>
       {% csrf_token %}
       <div class="option-label"><span class="eyebrow">Colour · <span data-color-label>{{ product.color_list.0 }}</span></span></div>
-      <div class="swatches">
+      <div class="swatches" role="radiogroup" aria-label="Colour">
         {% for c in product.color_list %}
-          <label title="{{ c|title }}"><input type="radio" name="color" value="{{ c }}" data-hex="{{ c|color_hex }}" data-ink="{{ c|ink_for }}" {% if forloop.first %}checked{% endif %}><span class="dot" style="background:{{ c|color_hex }}"></span></label>
+          <label title="{{ c|title }}"><input type="radio" name="color" value="{{ c }}" aria-label="Colour: {{ c }}" data-hex="{{ c|color_hex }}" data-ink="{{ c|ink_for }}" {% if forloop.first %}checked{% endif %}><span class="dot" style="background:{{ c|color_hex }}"></span></label>
         {% endfor %}
       </div>
 
@@ -38,7 +42,7 @@
         <span class="eyebrow">Size</span>
         {% if show_size_advisor %}<button type="button" data-advisor-toggle>✦ Find my size with AI</button>{% endif %}
       </div>
-      <div class="sizes">
+      <div class="sizes" role="radiogroup" aria-label="Size">
         {% for s in product.size_list %}
           <label><input type="radio" name="size" value="{{ s }}" {% if product.size_list|length == 1 %}checked{% endif %} required><span>{{ s }}</span></label>
         {% endfor %}

@@ -1,5 +1,7 @@
 {% extends "base.html" %}
-{% block title %}Client care · {{ BRAND_NAME }}{% endblock %}
+{% block title %}Questions & answers · Client care · {{ BRAND_NAME }}{% endblock %}
+{% block description %}Delivery, returns, payment, sizing, care and repairs at {{ BRAND_NAME }}, answered by our client advisors.{% endblock %}
+{% load store_extras %}{% block structured_data %}{{ ld|ld_json }}{% endblock %}
 
 {% block content %}
 <header class="page-head">

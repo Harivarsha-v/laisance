@@ -40,6 +40,34 @@ class RequestLogMiddleware:
         return response
 
 
+class SecurityHeadersMiddleware:
+    """Content-Security-Policy and related headers. Scripts only from our own origin (no inline JS);
+    inline styles are allowed because templates use style attributes for layout tweaks."""
+
+    CSP = "; ".join([
+        "default-src 'self'",
+        "script-src 'self'",
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+        "font-src 'self' https://fonts.gstatic.com",
+        "img-src 'self' data:",
+        "connect-src 'self'",
+        "frame-ancestors 'none'",
+        "base-uri 'self'",
+        "form-action 'self'",
+    ])
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        if not request.path.startswith("/admin"):  # the admin ships its own inline scripts
+            response.setdefault("Content-Security-Policy", self.CSP)
+        response.setdefault("Referrer-Policy", "same-origin")
+        response.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+        return response
+
+
 class MaintenanceModeMiddleware:
     """MAINTENANCE_MODE=true serves the 503 page (health check and admin stay up)."""
 

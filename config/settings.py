@@ -42,12 +42,14 @@ INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
+    "django.contrib.sitemaps",
     "store",
 ]
 
 MIDDLEWARE = [
     "store.middleware.RequestLogMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "store.middleware.SecurityHeadersMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "store.middleware.MaintenanceModeMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -104,7 +106,7 @@ CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", "OPTIONS": {"min_length": 10}},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
@@ -133,6 +135,10 @@ LOGOUT_REDIRECT_URL = "home"
 
 CART_SESSION_KEY = "cart"
 CSRF_FAILURE_VIEW = "store.views_care.csrf_failure"
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = CSRF_COOKIE_SAMESITE = "Lax"
+# CSRF_COOKIE_HTTPONLY stays False: site.js reads the token for fetch() POSTs (Django's documented AJAX pattern)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 2_621_440  # 2.5 MB request bodies
 
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -158,6 +164,7 @@ LOGGING = {
     "loggers": {
         "laisance.requests": {"handlers": ["console", "requests_file"], "level": "INFO", "propagate": False},
         "laisance": {"handlers": ["console"], "level": "INFO"},
+        "django.security": {"handlers": ["console"], "level": "WARNING", "propagate": False},
         "django.server": {"handlers": [], "propagate": False},  # our request logger replaces runserver's
     },
 }

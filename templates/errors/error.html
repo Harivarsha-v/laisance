@@ -1,4 +1,5 @@
 {% extends minimal|yesno:"errors/minimal_base.html,base.html" %}
+{% block robots %}noindex, follow{% endblock %}
 {% block title %}{{ code }} · {{ title }} · {{ BRAND_NAME }}{% endblock %}
 
 {% block content %}

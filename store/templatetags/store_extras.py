@@ -90,8 +90,23 @@ def garment(product, css_class="", label=True, color=None):
         '<figure class="art art--drawn {cls}" style="--swatch:{sw};--ink:{ink}" role="img" aria-label="{name}">'
         '<svg viewBox="0 0 200 260" fill="none" stroke="{ink}" stroke-width="1.15" stroke-linecap="round" '
         'stroke-linejoin="round" aria-hidden="true">{drawing}</svg>{caption}</figure>',
-        cls=css_class, sw=swatch, ink=ink, name=product.name, drawing=mark_safe(drawing), caption=caption,
+        cls=css_class, sw=swatch, ink=ink, name=product.name, caption=caption,
+        drawing=mark_safe(drawing),  # noqa: S308 - built-in SVG constants, never user input
     )
+
+
+@register.filter
+def ld_json(data):
+    """Render a dict as a JSON-LD <script> block. '<', '>' and '&' are escaped so data can't close the tag."""
+    import json
+
+    payload = json.dumps(data, ensure_ascii=False).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
+    return mark_safe(f'<script type="application/ld+json">{payload}</script>')  # noqa: S308 - escaped above
+
+
+@register.simple_tag(takes_context=True)
+def absolute(context, path):
+    return context["request"].build_absolute_uri(path)
 
 
 @register.filter

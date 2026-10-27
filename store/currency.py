@@ -25,13 +25,16 @@ _last = {"source": "not fetched yet", "fetched_at": None, "latency_ms": None, "e
 
 
 def _fetch():
+    if not settings.CURRENCY_API_URL.startswith("https://"):
+        raise ValueError("CURRENCY_API_URL must be an https:// URL")
     targets = ",".join(c for c in settings.CURRENCIES if c != "USD")
     url = f"{settings.CURRENCY_API_URL}?{urllib.parse.urlencode({'from': 'USD', 'to': targets})}"
     headers = {"User-Agent": "laisance-store/1.0", "Accept": "application/json"}
     if settings.CURRENCY_API_KEY:
         headers["Authorization"] = f"Bearer {settings.CURRENCY_API_KEY}"
     started = time.monotonic()
-    with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=settings.CURRENCY_API_TIMEOUT) as r:
+    request = urllib.request.Request(url, headers=headers)  # noqa: S310 - scheme checked above
+    with urllib.request.urlopen(request, timeout=settings.CURRENCY_API_TIMEOUT) as r:  # noqa: S310
         data = json.load(r)
     rates = {"USD": 1.0, **{k: float(v) for k, v in data["rates"].items() if k in settings.CURRENCIES}}
     return rates, round((time.monotonic() - started) * 1000)

@@ -33,7 +33,10 @@ def faq(request):
     topics = {}
     for f in sorted(FAQ.objects.filter(is_published=True), key=lambda f: (order.index(f.topic), f.sort_order)):
         topics.setdefault(f.get_topic_display(), []).append(f)
-    return render(request, "care/faq.html", {"topics": topics})
+    ld = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+        {"@type": "Question", "name": f.question, "acceptedAnswer": {"@type": "Answer", "text": f.answer}}
+        for faqs in topics.values() for f in faqs]}
+    return render(request, "care/faq.html", {"topics": topics, "ld": ld})
 
 
 def error_codes(request):
@@ -189,8 +192,8 @@ def _error_page(request, code, status, message=None):
     err = None
     try:
         err = ErrorCode.objects.filter(code=code).first()
-    except Exception:  # database may be the reason we're here
-        pass
+    except Exception:  # database may be the reason we're here; still show a page
+        log.exception("Could not load error code %s for the error page", code)
     ctx = {"code": code, "title": err.title if err else "Something went wrong",
            "message": message or (err.meaning if err else ""), "what_to_do": err.what_to_do if err else "",
            "assistant_prompt": f"What does error {code} mean?", "path": request.path}

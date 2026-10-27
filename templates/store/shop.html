@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% block title %}{% if category %}{{ category.name }} · {% endif %}{{ department_label }} · {{ BRAND_NAME }}{% endblock %}
+{% block title %}{% if category %}{{ category.name }} for {{ department_label }}{% else %}{{ department_label }}’s collection{% endif %} · {{ BRAND_NAME }}{% endblock %}
+{% block description %}{% if category %}{{ category.name }} for {{ department_label|lower }} from {{ BRAND_NAME }}, Paris: {{ products|length }} pieces this season, made in limited numbers.{% else %}The {{ department_label|lower }}’s Autumn–Winter collection from {{ BRAND_NAME }}, Paris: cashmere, silk and fluid tailoring, made in limited numbers.{% endif %}{% endblock %}
 
 {% block content %}
 <header class="page-head">

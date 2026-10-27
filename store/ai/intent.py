@@ -102,7 +102,7 @@ def parse(text):
     consumed = set()
     occasions_seen = []
     negate_window = 0
-    for i, w in enumerate(ws):
+    for w in ws:
         if w in NEGATORS:
             negate_window = 3
             continue
