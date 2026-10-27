@@ -31,7 +31,14 @@ if not SECRET_KEY:
 ALLOWED_HOSTS = env_list("ALLOWED_HOSTS", "127.0.0.1,localhost")
 if os.environ.get("RENDER_EXTERNAL_HOSTNAME"):  # set automatically on Render
     ALLOWED_HOSTS.append(os.environ["RENDER_EXTERNAL_HOSTNAME"])
-CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS") + [f"https://{h}" for h in ALLOWED_HOSTS if "." in h and not h[0].isdigit()]
+ON_VERCEL = bool(os.environ.get("VERCEL"))  # set automatically on Vercel
+if ON_VERCEL:
+    ALLOWED_HOSTS.append(".vercel.app")
+    CSRF_TRUSTED_ORIGINS_EXTRA = ["https://*.vercel.app"]
+else:
+    CSRF_TRUSTED_ORIGINS_EXTRA = []
+CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS") + CSRF_TRUSTED_ORIGINS_EXTRA + [
+    f"https://{h}" for h in ALLOWED_HOSTS if "." in h and not h[0].isdigit() and not h.startswith(".")]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -103,6 +110,8 @@ MAINTENANCE_MODE = env_bool("MAINTENANCE_MODE", False)  # serves the 503 page ev
 AI_RATE_LIMIT = int(os.environ.get("AI_RATE_LIMIT", "20"))
 
 CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}}
+if ON_VERCEL:  # serverless instances share nothing in memory, so rate limits and rate caches live in the database
+    CACHES = {"default": {"BACKEND": "django.core.cache.backends.db.DatabaseCache", "LOCATION": "cache_table"}}
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -122,8 +131,9 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
     "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
-                    if not DEBUG else "django.contrib.staticfiles.storage.StaticFilesStorage"},
+                    if not (DEBUG or ON_VERCEL) else "django.contrib.staticfiles.storage.StaticFilesStorage"},
 }
+WHITENOISE_USE_FINDERS = ON_VERCEL  # Vercel has no collectstatic step; serve straight from static/
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
@@ -148,7 +158,7 @@ if not DEBUG:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_REDIRECT_EXEMPT = [r"^health/?$", r"^health\.json$"]
 
-LOG_DIR = BASE_DIR / "logs"
+LOG_DIR = Path("/tmp/laisance-logs") if ON_VERCEL else BASE_DIR / "logs"  # only /tmp is writable on Vercel
 LOG_DIR.mkdir(exist_ok=True)
 LOGGING = {
     "version": 1,
