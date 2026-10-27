@@ -4,6 +4,7 @@
 
 **Live site:** https://laisance.vercel.app
 **Health check:** https://laisance.vercel.app/health/
+**Repository:** https://github.com/Harivarsha-v/laisance
 
 A responsive Django website for a fictional high-end fashion house (relaxed, fluid tailoring and cashmere).
 It has a curated seasonal collection, a private AI stylist, and an AI **client-care assistant** in a chat widget
@@ -70,7 +71,36 @@ practical AI features straight into the code, with no paid AI service.
 - **Frankfurter** exchange-rate API with a timeout, a cache and fallbacks.
 - **Security and operations:** a Content Security Policy and security headers, CSRF protection, rate limiting,
   request logging, a maintenance mode and a health check page.
-- **Deployment:** Render (gunicorn and whitenoise), with configuration through environment variables.
+- **Deployment:** Vercel (serverless Python, HTTPS) with Neon Postgres and MongoDB Atlas, all on free tiers that
+  don't expire. Configuration comes from environment variables.
+
+### Try it on the live site
+
+| Page | Link | What to look at |
+|---|---|---|
+| Home | https://laisance.vercel.app/ | The hero, then scroll through the seven-chapter story |
+| Women / Men | https://laisance.vercel.app/women/ · https://laisance.vercel.app/men/ | The curated collections, by category tab |
+| A product | https://laisance.vercel.app/product/double-face-cashmere-overcoat-men/ | Colours, size advisor, "Complete the look" |
+| Private stylist | https://laisance.vercel.app/stylist/ | Try "a wedding in Capri for her, under $10,000" |
+| Client care (FAQ) | https://laisance.vercel.app/help/ | The 15 FAQs from the SQL database |
+| Error codes | https://laisance.vercel.app/help/error-codes/ | All 8 codes, each with a preview of its page |
+| Contact | https://laisance.vercel.app/contact/ | The form opens a support ticket |
+| Custom 404 | https://laisance.vercel.app/this-does-not-exist/ | Click "Ask the assistant" |
+| Health check | https://laisance.vercel.app/health/ | SQL, MongoDB and the exchange-rate API, live |
+
+The chat widget (bottom right, "Client care") is on every page. Questions to try: "How long does delivery take?",
+"What does error 429 mean?", and something it can't know, such as "Do you sponsor football teams?", which opens a
+ticket.
+
+### Services used
+
+| Service | Used for | Plan |
+|---|---|---|
+| Vercel | Hosting the Django app over HTTPS | Hobby (free) |
+| Neon Postgres | SQL data: products, orders, FAQs, error codes, support tickets, sessions, cache | Free |
+| MongoDB Atlas | Chat logs and "was this helpful?" feedback | M0 (free) |
+| Frankfurter | Live exchange rates for the currency selector | Free, no key |
+| GitHub | Source code; every push to `main` redeploys the site | Free |
 
 ---
 
@@ -85,9 +115,12 @@ practical AI features straight into the code, with no paid AI service.
 | Assistant answers from FAQ data, explains error codes, creates a ticket when it can't answer | `store/ai/concierge.py` |
 | Support tickets in SQL; chat logs and feedback in MongoDB | `SupportTicket` model (SQL). `store/mongo.py` writes `chat_logs` and `feedback` to MongoDB Atlas. |
 | API keys and secrets in environment variables, nothing confidential in Git | `config/settings.py` reads everything from env vars, see `.env.example`. `.env` and the database are git-ignored. |
-| Request logging | `store/middleware.py` `RequestLogMiddleware`: method, path, status, duration and IP for every request, to stdout and `logs/requests.log` |
-| Health check page | `/health/` (HTML) and `/health.json`: SQL, MongoDB, exchange-rate API, request stats. Also Render's health check. |
+| Request logging | `store/middleware.py` `RequestLogMiddleware`: method, path, status, duration and IP for every request, to stdout (visible in Vercel's runtime logs) and to `logs/requests.log` locally |
+| Health check page | `/health/` (HTML) and `/health.json`: SQL, MongoDB, exchange-rate API, request stats |
 | Third-party API with time limit and fallback | `store/currency.py`: Frankfurter exchange-rate API for the currency selector (USD, EUR, GBP, CHF, JPY). 2.5 s timeout, 6 h cache, then last good rates, then built-in reference rates. |
+| Live HTTPS link and GitHub repo | https://laisance.vercel.app and https://github.com/Harivarsha-v/laisance |
+| Mobile-friendly; a wrong address shows the custom 404 | Responsive layouts tested at phone and desktop widths and on a real phone; any unknown URL returns the custom 404 page |
+| README with the live link and one proposed improvement | This file; see "Proposed improvement" below |
 
 ### Where each error code can actually happen
 - **400:** malformed JSON sent to the assistant, stylist or feedback APIs.
@@ -149,11 +182,15 @@ WhiteNoise straight from `static/`. `render.yaml` and `build.sh` are kept as an 
 Environment variables: `SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS`, `DATABASE_URL`, `MONGODB_URI`,
 `MONGODB_DB`, `CURRENCY_API_URL`, `CURRENCY_API_KEY` (optional), `CURRENCY_API_TIMEOUT`, `AI_RATE_LIMIT`, `MAINTENANCE_MODE`.
 
-## Checks before submitting
-- [ ] Open the live link on a phone: menu, chat widget, product page, FAQ.
-- [ ] Visit `https://<site>/this-does-not-exist`: the custom 404 appears, and "Ask the assistant" explains it.
-- [ ] Ask the widget something it can't know ("do you sponsor football teams?"): a ticket `LA-000xx` is created (visible in `/admin/`).
-- [ ] `/health/` shows SQL, MongoDB and the exchange-rate API as Operational.
+## Checks on the live site
+- [x] The live link works on a phone: menu, chat widget, product page, FAQ.
+- [x] https://laisance.vercel.app/this-does-not-exist/ shows the custom 404, and "Ask the assistant" explains it.
+- [x] Asking the widget something it can't know ("do you sponsor football teams?") creates a ticket (`LA-00001`).
+- [x] `/health/` shows SQL (Postgres), MongoDB and the exchange-rate API as Operational.
+- [x] More than 20 assistant messages a minute returns 429.
+- [x] Chat logs are stored in MongoDB Atlas (`chat_logs` collection).
+
+Automated tests: `python manage.py test store` (45 tests covering the assistant, APIs, pages, error codes and SEO).
 
 ---
 
@@ -178,11 +215,14 @@ store/
   ratelimit.py          429 rate limiting for the AI endpoints
   management/commands/  seed_store, seed_help
 templates/              pages, partials (assistant widget), errors
-static/                 css, js
-render.yaml, build.sh   deployment
+static/                 css, js, images (products and story frames)
+api/index.py            Vercel entry point (WSGI)
+vercel.json             Vercel routing
+setup_db.sh             one-time production database setup (migrations, cache table, content)
+render.yaml, build.sh   alternative Render deployment
 ```
 
-*A student project. No payments are taken and the brand is fictional.*
+*A student project. No payments are taken, the brand is fictional, and it has no connection to any real fashion house.*
 
 
 ## Photography credits
