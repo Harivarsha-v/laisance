@@ -31,15 +31,27 @@ def pair_score(base, cand):
     )
 
 
+SLOT_REASONS = {
+    "top": "{colour} close to the skin, under the {base}",
+    "bottom": "{colour} below, to let the {base} lead",
+    "one_piece": "{colour}, a single line beside the {base}",
+    "outerwear": "a {colour} layer over the {base}",
+    "shoes": "{colour} underfoot, to ground the look",
+    "accessory": "{colour}, as the final gesture",
+}
+
+
 def explain(base, cand):
+    """A short reason written for the candidate's role in the outfit, so each suggestion reads differently."""
     shared = set(base.color_list) & set(cand.color_list)
+    colour = sorted(shared)[0] if shared else (cand.color_list[0] if cand.color_list else "a quiet colour")
     if shared:
-        reason = REASONS["tonal"].format(c=sorted(shared)[0])
-    else:
-        reason = REASONS["color"].format(c=cand.color_list[0].title() if cand.color_list else "Its colour")
-    if base.style == cand.style:
-        reason += f", {REASONS['style'].format(s=cand.get_style_display().lower())}"
-    return reason
+        colour = f"tonal {colour}"
+    template = SLOT_REASONS.get(cand.category.slot, "{colour}, chosen to sit with the {base}")
+    if base.category.slot in ("accessory", "shoes") and cand.category.slot in ("top", "bottom", "one_piece"):
+        template = "{colour}, to wear with the {base}"  # clothes aren't "under" a scarf or a shoe
+    noun = next((w for w in reversed(base.name.split()) if w.isalpha()), "piece").lower()  # "Slip Dress" -> "dress"
+    return template.format(colour=colour, base=noun)
 
 
 def complete_the_look(product, n=3):

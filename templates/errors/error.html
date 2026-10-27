@@ -11,6 +11,9 @@
   <div class="error-actions">
     {% if not minimal %}
       <button class="btn" type="button" data-ask="{{ assistant_prompt|default:'' }}" data-ask-open><span>Ask the assistant</span></button>
+    {% else %}
+      {# fallback page (database unavailable): no widget, so link to client care instead #}
+      <a class="btn" href="/help/"><span>Ask the assistant</span></a>
     {% endif %}
     <a class="btn btn--ghost" href="/"><span>Return to the maison</span></a>
   </div>

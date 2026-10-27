@@ -16,13 +16,13 @@
   {% block structured_data %}{% endblock %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..600;1,400..500&family=Jost:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/site.css' %}">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%231d1b18'/%3E%3Ctext x='32' y='44' font-family='Georgia' font-style='italic' font-size='36' fill='%23f5f1ea' text-anchor='middle'%3EL%3C/text%3E%3C/svg%3E">
 </head>
 <body class="{% block body_class %}{% endblock %}">
   <a class="skip-link" href="#main">Skip to content</a>
-  <div class="announce">Complimentary express delivery and returns · <a href="{% url 'stylist' %}">Speak with your private stylist</a></div>
+  <div class="announce">Complimentary delivery and returns</div>
 
   <header class="header {% block header_class %}header--solid{% endblock %}">
     <button class="menu-btn" aria-expanded="false" aria-controls="site-nav">Menu</button>
@@ -101,7 +101,6 @@
         <h4 class="eyebrow">Client care</h4>
         <ul>
           <li><a href="{% url 'faq' %}">Questions &amp; answers</a></li>
-          <li><a href="{% url 'error_codes' %}">Error codes</a></li>
           <li><a href="{% url 'contact' %}">Contact an advisor</a></li>
           <li><a href="{% if user.is_authenticated %}{% url 'account' %}{% else %}{% url 'login' %}{% endif %}">Your orders</a></li>
         </ul>
@@ -110,15 +109,12 @@
         <h4 class="eyebrow">La Maison</h4>
         <ul>
           <li><a href="{% url 'faq' %}#services">Repairs &amp; aftercare</a></li>
-          <li><a href="{% url 'health' %}">Service status</a></li>
-          <li><a href="{% url 'admin:index' %}">Staff</a></li>
         </ul>
       </div>
     </div>
-    <div class="footer-mark" aria-hidden="true">{{ BRAND_NAME }}</div>
     <div class="footer-base">
-      <span class="eyebrow">© {% now "Y" %} {{ BRAND_NAME }}, Paris. A student project.</span>
-      <span class="eyebrow">Our stylist and assistant run entirely in-house</span>
+      <span class="colophon">© {% now "Y" %} {{ BRAND_NAME }}, Paris · A student project</span>
+      <span class="colophon"><a href="{% url 'error_codes' %}">Error codes</a> · <a href="{% url 'health' %}">Service status</a></span>
     </div>
   </footer>
 

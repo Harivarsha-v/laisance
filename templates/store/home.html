@@ -7,16 +7,15 @@
 {% block content %}
 <section class="hero">
   <div class="hero-copy">
-    <p class="hero-season">Automne–Hiver <span>MMXXVI</span></p>
+    <p class="hero-season">Automne–Hiver</p>
     <h1 class="display hero-title">The art<br>of <em>ease.</em></h1>
     <div class="hero-lede">
-      <p class="hero-lede-lead">Dressed, without effort.</p>
       <p class="hero-lede-body">Silk, cashmere and wool, cut in Paris to fall, to breathe, and to follow every gesture.</p>
     </div>
     <nav class="hero-index" aria-label="Shop">
-      <a href="{% url 'shop' 'women' %}"><span>i.</span>Women</a>
-      <a href="{% url 'shop' 'men' %}"><span>ii.</span>Men</a>
-      <a href="{% url 'stylist' %}"><span>iii.</span>Private styling</a>
+      <a href="{% url 'shop' 'women' %}">Women</a>
+      <a href="{% url 'shop' 'men' %}">Men</a>
+      <a href="{% url 'stylist' %}">Private styling</a>
     </nav>
   </div>
   {% with plate=hero.0 %}{% if plate %}
@@ -38,24 +37,24 @@
 </section>
 
 <section class="section wrap credo">
-  <p class="credo-text reveal"><span class="dropcap">E</span>ase is the rarest luxury. We cut cloth to follow the body, never to hold it, so that a coat, a shirt, a single silk scarf may be worn for decades and still feel effortless.</p>
+  <p class="credo-text reveal">Ease is the rarest luxury. We cut cloth to follow the body, never to hold it, so that a coat, a shirt, a single silk scarf may be worn for decades and still feel effortless.</p>
   <p class="credo-note reveal">Each season we release only a handful of pieces, made in limited numbers by the ateliers that have mastered them. Our private stylist, an AI that lives on our own servers, knows every one of them.</p>
 </section>
 
 <section class="wrap">
   <div class="section-head">
-    <h2 class="display h-lg">The autumn pieces</h2>
+    <h2 class="display h-md">The autumn pieces</h2>
     <a class="link-u" href="{% url 'search' %}?q=new">The full season <span class="arrow">→</span></a>
   </div>
   <div class="edit-grid reveal-stagger">
-    {% for product in new_in|slice:":7" %}{% include "partials/product_card.html" %}{% endfor %}
+    {% for product in new_in|slice:":5" %}{% include "partials/product_card.html" %}{% endfor %}
   </div>
 </section>
 
 <section class="band section" style="margin-top:clamp(72px,10vw,160px)">
   <div class="wrap band-grid">
     <div class="reveal">
-      <h2 class="display h-lg" style="margin:0 0 26px">A stylist, at any hour.</h2>
+      <h2 class="display h-md" style="margin:0 0 26px">A stylist,<br>at any hour.</h2>
       <p class="band-lede">Describe the occasion, and the colours you love or never wear. Our stylist composes a complete look from the collection, tells you why it works, and refines it with you, as an advisor in our salon would.</p>
       <div class="chips" style="margin-top:32px">
         {% for s in starters %}<a class="chip" href="{% url 'stylist' %}?q={{ s|urlencode }}">{{ s }}</a>{% endfor %}
@@ -75,13 +74,13 @@
     {% if dip_women %}
     <a class="dip reveal" href="{% url 'shop' 'women' %}">
       {% garment dip_women css_class="art--plate" label=False %}
-      <div class="dip-label"><h2 class="display h-lg">Women</h2><span class="link-u">The collection <span class="arrow">→</span></span></div>
+      <div class="dip-label"><h2 class="display h-md">Women</h2><span class="link-u">The collection <span class="arrow">→</span></span></div>
     </a>
     {% endif %}
     {% if dip_men %}
     <a class="dip reveal" href="{% url 'shop' 'men' %}">
       {% garment dip_men css_class="art--plate" label=False %}
-      <div class="dip-label"><h2 class="display h-lg">Men</h2><span class="link-u">The collection <span class="arrow">→</span></span></div>
+      <div class="dip-label"><h2 class="display h-md">Men</h2><span class="link-u">The collection <span class="arrow">→</span></span></div>
     </a>
     {% endif %}
   </div>

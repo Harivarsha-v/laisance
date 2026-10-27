@@ -83,7 +83,7 @@ def garment(product, css_class="", label=True, color=None):
     ink = _ink_for(swatch)
     drawing = GARMENTS.get(product.category.slug, GARMENTS["t-shirts"])
     caption = (
-        format_html('<figcaption><span>No. {}</span><span>{}</span></figcaption>', f"{product.pk:03d}", product.get_style_display())
+        format_html('<figcaption><span>No. {}</span></figcaption>', f"{product.pk:03d}")
         if label else ""
     )
     return format_html(

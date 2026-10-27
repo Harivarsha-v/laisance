@@ -26,12 +26,15 @@ STYLIST_SESSION_KEY = "stylist"
 def home(request):
     products = Product.objects.select_related("category")
     hero = [products.filter(category__slug=slug, is_featured=True).first() for slug in ("coats", "dresses", "blazers")]
+    hero = [p for p in hero if p]
+    shown = {hero[0].pk} if hero else set()  # each piece appears once on the page
+    rest = products.exclude(pk__in=shown)
     return render(request, "store/home.html", {
-        "hero": [p for p in hero if p],
-        "dip_women": products.filter(department=Department.WOMEN, category__slug="coats").first(),
-        "dip_men": products.filter(department=Department.MEN, category__slug="blazers").first(),
+        "hero": hero,
+        "dip_women": rest.filter(department=Department.WOMEN, category__slug="dresses").first(),
+        "dip_men": rest.filter(department=Department.MEN, category__slug="blazers").first(),
         # lead the editorial grid with a statement piece rather than, say, a belt
-        "new_in": sorted(products.filter(is_new=True)[:12], key=lambda p: p.slot not in ("one_piece", "outerwear"))[:8],
+        "new_in": sorted(rest.filter(is_new=True)[:12], key=lambda p: p.slot not in ("one_piece", "outerwear"))[:8],
         "featured_women": products.filter(is_featured=True, department=Department.WOMEN)[:4],
         "featured_men": products.filter(is_featured=True, department=Department.MEN)[:4],
         "starters": STARTERS,

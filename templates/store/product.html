@@ -12,12 +12,6 @@
   <div class="gallery">
     {% garment product css_class="art--hero" %}
     {% garment product css_class="art--detail" label=False %}
-    <figure class="art" style="display:grid;place-items:center;background:var(--paper-2)">
-      <div style="text-align:center;padding:24px">
-        <p class="eyebrow">Composition</p>
-        <p class="display h-sm" style="margin-top:10px">{{ product.material|default:"Fine fabric" }}</p>
-      </div>
-    </figure>
   </div>
 
   <div class="buy">
@@ -40,7 +34,7 @@
 
       <div class="option-label">
         <span class="eyebrow">Size</span>
-        {% if show_size_advisor %}<button type="button" data-advisor-toggle>✦ Find my size with AI</button>{% endif %}
+        {% if show_size_advisor %}<button type="button" data-advisor-toggle>Find your size</button>{% endif %}
       </div>
       <div class="sizes" role="radiogroup" aria-label="Size">
         {% for s in product.size_list %}
