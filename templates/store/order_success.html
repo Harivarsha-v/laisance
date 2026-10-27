@@ -6,7 +6,7 @@
 {% block content %}
 <section class="success">
   <p class="eyebrow">Order No. {{ order.pk|stringformat:"05d" }}</p>
-  <h1 class="display h-xl split-words" style="margin:20px 0">Thank <em>you,</em> {{ order.full_name|cut:" "|truncatechars:20 }}.</h1>
+  <h1 class="display h-xl" style="margin:20px 0">Thank you, {{ order.full_name|cut:" "|truncatechars:20 }}.</h1>
   <p class="lede" style="margin:0 auto">Your pieces are being prepared in our atelier and will be presented in our signature box. A confirmation is on its way to {{ order.email }}.</p>
   <div style="max-width:520px;margin:48px auto 0;text-align:left">
     {% for item in order.items.all %}

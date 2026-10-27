@@ -5,7 +5,7 @@
 
 {% block content %}
 <header class="page-head">
-  <h1 class="display h-xl split-words">Your <em>bag</em></h1>
+  <h1 class="display h-xl">Your bag</h1>
   <p class="eyebrow">{{ cart|length }} item{{ cart|length|pluralize }}</p>
 </header>
 
@@ -44,7 +44,7 @@
 </div>
 {% else %}
   <div class="empty">
-    <p class="display h-md">Your bag is <em>empty</em>.</p>
+    <p class="display h-md">Your bag is empty.</p>
     <p class="muted" style="margin:18px 0 28px">Discover the season, or let the stylist compose a look for you.</p>
     <a class="btn" href="{% url 'shop' 'women' %}"><span>Shop women</span></a>
     <a class="btn btn--ghost" href="{% url 'shop' 'men' %}"><span>Shop men</span></a>

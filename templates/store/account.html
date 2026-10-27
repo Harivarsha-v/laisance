@@ -6,8 +6,7 @@
 {% block content %}
 <header class="page-head">
   <div>
-    <p class="eyebrow">Account</p>
-    <h1 class="display h-lg" style="margin-top:12px">Hello, <em>{{ user.username }}</em></h1>
+    <h1 class="display h-lg" style="margin-top:12px">Hello, {{ user.username }}</h1>
   </div>
   <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="link-u" type="submit">Sign out</button></form>
 </header>

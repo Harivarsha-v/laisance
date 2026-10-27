@@ -4,9 +4,8 @@
 
 {% block content %}
 <section class="error-page">
-  <p class="eyebrow">Error {{ code }}</p>
   <h1 class="display error-code">{{ code }}</h1>
-  <h2 class="display h-md"><em>{{ title }}</em></h2>
+  <h2 class="display h-md">{{ title }}</h2>
   {% if message %}<p class="lede" style="margin:20px auto 0">{{ message }}</p>{% endif %}
   {% if what_to_do %}<p class="muted" style="max-width:46ch;margin:16px auto 0">{{ what_to_do }}</p>{% endif %}
   <div class="error-actions">

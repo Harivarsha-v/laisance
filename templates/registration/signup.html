@@ -4,8 +4,7 @@
 
 {% block content %}
 <div class="narrow">
-  <p class="eyebrow">Join the house</p>
-  <h1 class="display h-lg" style="margin:14px 0 40px">Create an <em>account</em></h1>
+  <h1 class="display h-lg" style="margin:14px 0 40px">Create an account</h1>
   <form method="post" novalidate>
     {% csrf_token %}
     {% for field in form %}

@@ -4,7 +4,6 @@
 
 {% block content %}
 <header class="page-head" style="grid-template-columns:1fr">
-  <p class="eyebrow"><span class="spark"></span>&nbsp; AI search</p>
   <form class="search-form" role="search" action="{% url 'search' %}" method="get" style="margin-top:12px">
     <input type="search" name="q" value="{{ q }}" placeholder="Describe what you're looking for…" aria-label="Search">
     <button class="link-u" type="submit">Search <span class="arrow">→</span></button>
@@ -26,7 +25,7 @@
   </div>
 {% elif q %}
   <div class="empty">
-    <p class="display h-md">Nothing for <em>“{{ q }}”</em>, yet.</p>
+    <p class="display h-md">Nothing for “{{ q }}”, yet.</p>
     <p class="muted" style="margin-top:18px">Try an occasion, a colour or a fabric. Or let the <a class="link-u" href="{% url 'stylist' %}?q={{ q|urlencode }}">stylist</a> take it from here.</p>
   </div>
 {% else %}

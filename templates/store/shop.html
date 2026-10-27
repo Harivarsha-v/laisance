@@ -10,7 +10,7 @@
       <a href="{% url 'shop' department %}" class="{% if category %}muted{% endif %}">{{ department_label }}</a>
       {% if category %}<span class="muted">/</span><span>{{ category.name }}</span>{% endif %}
     </nav>
-    <h1 class="display h-xl split-words">{% if category %}{{ category.name }}{% else %}{{ department_label }}{% endif %}</h1>
+    <h1 class="display h-xl">{% if category %}{{ category.name }}{% else %}{{ department_label }}{% endif %}</h1>
   </div>
   <p class="lede" style="text-align:right;max-width:30ch">
     {% if category %}{{ products|length }} piece{{ products|length|pluralize }} this season.{% else %}The Autumn–Winter collection. {{ products|length }} pieces, made in limited numbers.{% endif %}
@@ -31,7 +31,7 @@
   </div>
 {% else %}
   <div class="empty">
-    <p class="display h-md">This edit is <em>resting</em> for the season.</p>
+    <p class="display h-md">This edit is resting for the season.</p>
     <p class="muted">Explore the rest of the collection, or <a class="link-u" href="{% url 'stylist' %}">speak with the stylist</a>.</p>
   </div>
 {% endif %}

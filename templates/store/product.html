@@ -15,7 +15,7 @@
     <figure class="art" style="display:grid;place-items:center;background:var(--paper-2)">
       <div style="text-align:center;padding:24px">
         <p class="eyebrow">Composition</p>
-        <p class="display h-sm" style="margin-top:10px"><em>{{ product.material|default:"Fine fabric" }}</em></p>
+        <p class="display h-sm" style="margin-top:10px">{{ product.material|default:"Fine fabric" }}</p>
       </div>
     </figure>
   </div>
@@ -75,7 +75,7 @@
         <summary>Description</summary>
         <div class="body">
           <p>{{ product.description }}</p>
-          <p class="ai-note"><span class="spark"></span> Described by our in-house AI</p>
+          <p class="ai-note">Described by our in-house AI</p>
         </div>
       </details>
       <details>
@@ -94,8 +94,8 @@
 <section class="look">
   <div class="look-grid">
     <div class="reveal">
-      <p class="eyebrow"><span class="spark"></span>&nbsp; Complete the look</p>
-      <h2 class="display h-lg" style="margin-top:16px">To wear <em>with it</em></h2>
+      <p class="eyebrow">Complete the look</p>
+      <h2 class="display h-lg" style="margin-top:16px">To wear with it</h2>
       <p class="lede" style="margin-top:20px">Our stylist has paired the {{ product.name|lower }} with pieces that share its palette, its spirit and its season.</p>
     </div>
     <div class="look-items reveal-stagger">
@@ -112,7 +112,7 @@
 
 {% if similar %}
 <section class="look">
-  <div class="section-head"><h2 class="display h-md">From the <em>same</em> family</h2></div>
+  <div class="section-head"><h2 class="display h-md">From the same family</h2></div>
   <div class="grid reveal-stagger">
     {% for product in similar %}{% include "partials/product_card.html" %}{% endfor %}
   </div>

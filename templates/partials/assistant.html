@@ -1,13 +1,13 @@
 {# Client-care AI assistant: on every page #}
 <div class="concierge" data-concierge data-starters='{{ assistant_starters|default_if_none:""|join:"|" }}'>
   <button class="concierge-toggle" type="button" aria-expanded="false" aria-controls="concierge-panel">
-    <span class="spark"></span><span>Client care</span>
+    <span>Client care</span>
   </button>
   <section class="concierge-panel" id="concierge-panel" role="dialog" aria-label="Client care assistant" hidden>
     <header class="concierge-head">
       <div>
         <p class="eyebrow">Client care · <span style="color:var(--accent)">online</span></p>
-        <p class="concierge-title">How may we <em>help?</em></p>
+        <p class="concierge-title">How may we help?</p>
       </div>
       <button type="button" data-concierge-close aria-label="Close">Close</button>
     </header>

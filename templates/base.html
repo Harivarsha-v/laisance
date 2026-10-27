@@ -16,7 +16,7 @@
   {% block structured_data %}{% endblock %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/site.css' %}">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%231d1b18'/%3E%3Ctext x='32' y='44' font-family='Georgia' font-style='italic' font-size='36' fill='%23f5f1ea' text-anchor='middle'%3EL%3C/text%3E%3C/svg%3E">
 </head>
@@ -30,7 +30,7 @@
       {% for value, label in nav_departments %}
         <a href="{% url 'shop' value %}" class="{% if department == value %}is-active{% endif %}">{{ label }}</a>
       {% endfor %}
-      <a href="{% url 'stylist' %}" class="ai-link {% if request.resolver_match.url_name == 'stylist' %}is-active{% endif %}"><i></i>Stylist</a>
+      <a href="{% url 'stylist' %}" class="{% if request.resolver_match.url_name == 'stylist' %}is-active{% endif %}">Stylist</a>
       <a href="{% url 'faq' %}" class="{% if request.resolver_match.url_name == 'faq' or request.resolver_match.url_name == 'error_codes' %}is-active{% endif %}">Client care</a>
     </nav>
     <a href="{% url 'home' %}" class="wordmark" aria-label="{{ BRAND_NAME }} home">{{ BRAND_NAME }}<small>Paris</small></a>

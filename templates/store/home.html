@@ -7,49 +7,44 @@
 {% block content %}
 <section class="hero">
   <div class="hero-copy">
-    <p class="eyebrow">Collection Automne–Hiver &nbsp;·&nbsp; Paris</p>
-    <h1 class="display h-xl split-words">The art<br>of <em>ease.</em></h1>
-    <div class="hero-foot">
-      <div class="hero-lede">
-        <p class="hero-lede-lead">Dressed, <em>without effort.</em></p>
-        <p class="hero-lede-body">Silk, cashmere and wool, cut in Paris to fall, to breathe, and to follow every gesture.</p>
-      </div>
-      <nav class="hero-index" aria-label="Shop">
-        <a href="{% url 'shop' 'women' %}"><span>01</span>Women</a>
-        <a href="{% url 'shop' 'men' %}"><span>02</span>Men</a>
-        <a href="{% url 'stylist' %}"><span>03</span>Private styling</a>
-      </nav>
+    <p class="hero-season">Automne–Hiver <span>MMXXVI</span></p>
+    <h1 class="display hero-title">The art<br>of <em>ease.</em></h1>
+    <div class="hero-lede">
+      <p class="hero-lede-lead">Dressed, without effort.</p>
+      <p class="hero-lede-body">Silk, cashmere and wool, cut in Paris to fall, to breathe, and to follow every gesture.</p>
     </div>
+    <nav class="hero-index" aria-label="Shop">
+      <a href="{% url 'shop' 'women' %}"><span>i.</span>Women</a>
+      <a href="{% url 'shop' 'men' %}"><span>ii.</span>Men</a>
+      <a href="{% url 'stylist' %}"><span>iii.</span>Private styling</a>
+    </nav>
   </div>
-  <div class="hero-stage" aria-hidden="true">
-    <div class="stamp">Automne<br>Hiver</div>
-    {% for p in hero %}
-      <a class="a{{ forloop.counter }}" href="{{ p.get_absolute_url }}" tabindex="-1">{% garment p css_class="art--hero" %}</a>
-    {% endfor %}
-  </div>
+  {% with plate=hero.0 %}{% if plate %}
+  <a class="hero-plate" href="{{ plate.get_absolute_url }}">
+    {% garment plate css_class="art--plate" %}
+    <p class="plate-note"><span>{{ plate.name }}</span><span>{{ plate.price|money }}</span></p>
+  </a>
+  {% endif %}{% endwith %}
 </section>
 
-<div class="marquee" aria-hidden="true">
-  <div class="marquee-track">
-    {% for i in "12" %}
-      <span>Double-face cashmere</span><b>Biella</b><span>Silk charmeuse</span><b>Lyon</b>
-      <span>Linen voile</span><b>Normandy</b><span>Box calfskin</span><b>Tuscany</b><span>Finished by hand</span><b>Paris</b>
-    {% endfor %}
-  </div>
-</div>
+<section class="materials wrap" aria-label="Our materials">
+  <ol>
+    <li><span>Double-face cashmere</span><span>Biella</span></li>
+    <li><span>Silk charmeuse</span><span>Lyon</span></li>
+    <li><span>Linen voile</span><span>Normandy</span></li>
+    <li><span>Box calfskin</span><span>Tuscany</span></li>
+    <li><span>Finished by hand</span><span>Paris</span></li>
+  </ol>
+</section>
 
-<section class="section wrap manifesto">
-  <p class="eyebrow reveal">La Maison</p>
-  <p class="big reveal">Ease is the rarest luxury. We cut cloth to follow the body, never to hold it, so that a coat, a shirt, a single silk scarf may be worn for decades and still feel <em>effortless</em>.</p>
-  <p class="muted reveal" style="margin:0">Each season we release only a handful of pieces, made in limited numbers by the ateliers that have mastered them. Our private stylist, an AI that lives on our own servers, knows every one of them by heart.</p>
+<section class="section wrap credo">
+  <p class="credo-text reveal"><span class="dropcap">E</span>ase is the rarest luxury. We cut cloth to follow the body, never to hold it, so that a coat, a shirt, a single silk scarf may be worn for decades and still feel effortless.</p>
+  <p class="credo-note reveal">Each season we release only a handful of pieces, made in limited numbers by the ateliers that have mastered them. Our private stylist, an AI that lives on our own servers, knows every one of them.</p>
 </section>
 
 <section class="wrap">
   <div class="section-head">
-    <div>
-      <p class="eyebrow">Nouveautés</p>
-      <h2 class="display h-lg" style="margin-top:12px">The <em>autumn</em> pieces</h2>
-    </div>
+    <h2 class="display h-lg">The autumn pieces</h2>
     <a class="link-u" href="{% url 'search' %}?q=new">The full season <span class="arrow">→</span></a>
   </div>
   <div class="edit-grid reveal-stagger">
@@ -60,19 +55,18 @@
 <section class="band section" style="margin-top:clamp(72px,10vw,160px)">
   <div class="wrap band-grid">
     <div class="reveal">
-      <p class="eyebrow"><span class="spark"></span>&nbsp; Private styling</p>
-      <h2 class="display h-lg" style="margin:18px 0 26px">Your stylist,<br><em>at any hour.</em></h2>
-      <p class="lede" style="color:rgba(245,241,234,.72)">Describe the occasion, and the colours you love or never wear. Our stylist composes a complete look from the collection, tells you why it works, and refines it with you, as a sales associate in our salon would.</p>
+      <h2 class="display h-lg" style="margin:0 0 26px">A stylist, at any hour.</h2>
+      <p class="band-lede">Describe the occasion, and the colours you love or never wear. Our stylist composes a complete look from the collection, tells you why it works, and refines it with you, as an advisor in our salon would.</p>
       <div class="chips" style="margin-top:32px">
         {% for s in starters %}<a class="chip" href="{% url 'stylist' %}?q={{ s|urlencode }}">{{ s }}</a>{% endfor %}
       </div>
     </div>
-    <div class="chat-demo reveal">
-      <div class="bubble me">A wedding in Capri. Something for her, under $10,000.</div>
-      <div class="bubble ai">Let the <strong>Silk Charmeuse Slip Dress</strong> in champagne speak first, with the <strong>Leather Strappy Sandal</strong> underfoot and the <strong>Silk Twill Scarf 90</strong> as the final gesture. Elegant without ever upstaging the couple.</div>
-      <div class="bubble me">Beautiful. Could you show me another?</div>
-      <a class="link-u" href="{% url 'stylist' %}?q={{ 'A wedding in Capri for her, under $10,000'|urlencode }}" style="justify-self:start;margin-top:8px">Continue with the stylist <span class="arrow">→</span></a>
-    </div>
+    <dl class="exchange reveal">
+      <div><dt>Client</dt><dd>A wedding in Capri. Something for her, under ten thousand.</dd></div>
+      <div><dt>Stylist</dt><dd>Let the Silk Charmeuse Slip Dress, in champagne, speak first. The Leather Strappy Sandal underfoot, and the Silk Twill Scarf 90 as the final gesture. Elegant without ever upstaging the couple.</dd></div>
+      <div><dt>Client</dt><dd>Beautiful. Could you show me another?</dd></div>
+      <div class="exchange-cta"><dt></dt><dd><a class="link-u" href="{% url 'stylist' %}?q={{ 'A wedding in Capri for her, under $10,000'|urlencode }}">Continue the conversation <span class="arrow">→</span></a></dd></div>
+    </dl>
   </div>
 </section>
 
@@ -80,14 +74,14 @@
   <div class="diptych">
     {% if dip_women %}
     <a class="dip reveal" href="{% url 'shop' 'women' %}">
-      {% garment dip_women css_class="art--hero" %}
-      <div class="dip-label"><p class="eyebrow" style="color:inherit">La collection</p><h2 class="display h-lg">Women</h2><span class="link-u">Discover <span class="arrow">→</span></span></div>
+      {% garment dip_women css_class="art--plate" label=False %}
+      <div class="dip-label"><h2 class="display h-lg">Women</h2><span class="link-u">The collection <span class="arrow">→</span></span></div>
     </a>
     {% endif %}
     {% if dip_men %}
     <a class="dip reveal" href="{% url 'shop' 'men' %}">
-      {% garment dip_men css_class="art--hero" %}
-      <div class="dip-label"><p class="eyebrow" style="color:inherit">La collection</p><h2 class="display h-lg">Men</h2><span class="link-u">Discover <span class="arrow">→</span></span></div>
+      {% garment dip_men css_class="art--plate" label=False %}
+      <div class="dip-label"><h2 class="display h-lg">Men</h2><span class="link-u">The collection <span class="arrow">→</span></span></div>
     </a>
     {% endif %}
   </div>
@@ -95,10 +89,7 @@
 
 <section class="wrap">
   <div class="section-head">
-    <div>
-      <p class="eyebrow">Les Signatures</p>
-      <h2 class="display h-md" style="margin-top:12px">Pieces made to be <em>kept</em></h2>
-    </div>
+    <h2 class="display h-md">Les signatures</h2>
   </div>
   <div class="grid reveal-stagger">
     {% for product in featured_women %}{% include "partials/product_card.html" %}{% endfor %}
