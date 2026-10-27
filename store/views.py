@@ -25,7 +25,7 @@ STYLIST_SESSION_KEY = "stylist"
 
 def home(request):
     products = Product.objects.select_related("category")
-    hero = [products.filter(category__slug=slug, is_featured=True).first() for slug in ("coats", "dresses", "blazers")]
+    hero = [products.filter(category__slug=slug, is_featured=True).first() for slug in ("coats", "blazers", "dresses")]
     hero = [p for p in hero if p]
     shown = {p.pk for p in hero[:2]}  # the two hero plates don't reappear lower down
     rest = products.exclude(pk__in=shown)
@@ -40,7 +40,7 @@ def home(request):
         "starters": STARTERS,
         # scroll story: the film is optional; drop static/video/atelier.mp4 in and it scrubs with scroll
         "has_film": (settings.BASE_DIR / "static" / "video" / "atelier.mp4").exists(),
-        "story_frames": ["cloth", "leather", "stitch", "atelier", "paris"],
+        "story_frames": ["01-fibre", "02-cloth", "03-finish", "04-details", "05-cut", "06-hand", "07-paris"],
         "ld": {
             "@context": "https://schema.org", "@type": "Organization", "name": settings.BRAND_NAME,
             "url": request.build_absolute_uri("/"),

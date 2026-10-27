@@ -372,6 +372,7 @@
   if (story) {
     const film = $(".story-film", story), frames = $$(".story-frame", story), chapters = $$(".chapter", story);
     const bar = $(".story-progress", story);
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
     let filmReady = false, target = 0, ticking = false;
     if (film) {
       const ready = () => { filmReady = film.duration > 0; story.classList.toggle("has-film", filmReady); film.pause(); };
@@ -389,6 +390,14 @@
       if (filmReady) {
         target = p * (film.duration - 0.05);
         if (Math.abs(film.currentTime - target) > 1 / 30) film.currentTime = target;  // scrub, don't play
+      } else if (frames.length) {
+        // each frame dissolves into the next and pushes in slowly as you scroll, like a film
+        const pos = p * (frames.length - 1);
+        frames.forEach((f, k) => {
+          const d = pos - k;  // <0: upcoming, 0: on screen, >0: leaving
+          f.style.opacity = Math.max(0, 1 - Math.abs(d)).toFixed(3);
+          f.style.transform = reduce ? "none" : `scale(${(1.1 - 0.08 * Math.min(1, Math.max(0, (d + 1) / 2))).toFixed(4)})`;
+        });
       }
     };
     addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(render); } }, { passive: true });
@@ -396,11 +405,8 @@
     render();
     // the chapter crossing the middle of the screen sets the active photograph
     const chapterIO = new IntersectionObserver((entries) => entries.forEach((e) => {
-      if (!e.isIntersecting) return;
-      e.target.classList.add("is-in");
-      const i = +e.target.dataset.frame;
-      frames.forEach((f, k) => f.classList.toggle("is-active", k === i));
-    }), { rootMargin: "-45% 0px -45% 0px" });
+      if (e.isIntersecting) e.target.classList.add("is-in");
+    }), { rootMargin: "-40% 0px -40% 0px" });
     chapters.forEach((c) => chapterIO.observe(c));
   }
 })();

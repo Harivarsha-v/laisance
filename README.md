@@ -114,50 +114,50 @@ render.yaml, build.sh   deployment
 
 ## Photography credits
 
-Product and story photographs are from [Unsplash](https://unsplash.com) under the
+Product photographs are from [Unsplash](https://unsplash.com) under the
 [Unsplash License](https://unsplash.com/license) (free to use, no permission required). Only free-licence
 images were used (no Unsplash+), and none show a recognisable brand logo. Files live in `static/img/`;
 the mapping is in `store/photo_credits.py`. A photo uploaded in `/admin/` overrides the shipped one.
 
 | Piece | Source |
 |---|---|
-| `suede-loafer-men` | https://unsplash.com/photos/a-pair-of-brown-suede-loafers-with-gold-hardwares-KOavcW0p7oc |
-| `double-face-cashmere-overcoat-men` | https://unsplash.com/photos/man-in-brown-coat-and-black-pants-iIjResyhhW0 |
-| `unstructured-linen-blazer-men` | https://unsplash.com/photos/a-pair-of-glasses-a-ball-of-yarn-a-pair-of-sunglasses-and-9Pspyy5lEMw |
-| `cashmere-shawl-cardigan-men` | https://unsplash.com/photos/a-pair-of-sunglasses-and-a-sweater-on-a-white-surface-PbzOBFz8Ulc |
-| `linen-camp-collar-shirt-men` | https://unsplash.com/photos/a-white-shirt-hanging-on-a-clothes-line-S4f4apZd-hA |
-| `silk-cotton-knit-polo-men` | https://unsplash.com/photos/a-white-and-beige-shirt-with-a-black-collar-rhzkqvr4NH4 |
-| `cashmere-jersey-tee-men` | https://unsplash.com/photos/a-white-shirt-on-a-white-background-4rUYuwJ2vGw |
+| `suede-loafer-men` | https://unsplash.com/photos/a-pair-of-brown-leather-loafers-on-a-stool-xPpfEQe0ZiY |
+| `double-face-cashmere-overcoat-men` | https://unsplash.com/photos/a-person-in-a-suit-A5nuQ2Lvg40 |
+| `unstructured-linen-blazer-men` | https://unsplash.com/photos/a-man-touching-his-suit-jacket-J0FuYqNWviw |
+| `cashmere-shawl-cardigan-men` | https://unsplash.com/photos/man-wearing-a-cap-glasses-and-scarf-outdoors-Lkc5ruvG-v0 |
+| `linen-camp-collar-shirt-men` | https://unsplash.com/photos/man-walking-on-a-wooden-deck-by-the-ocean-kXsBsAp5Q0Y |
+| `silk-cotton-knit-polo-men` | https://unsplash.com/photos/white-polo-shirt-on-black-table-SL2g8Ry_Ozs |
+| `cashmere-jersey-tee-men` | https://unsplash.com/photos/white-crew-neck-t-shirt-acn5ERAeSb4 |
 | `suede-knee-high-boot-women` | https://unsplash.com/photos/a-pair-of-black-leather-slouch-boots-tDHBHyAO-Hw |
 | `calfskin-ballerina-women` | https://unsplash.com/photos/a-pair-of-black-shoes-sitting-on-top-of-a-white-surface-UTXXzJA6O_E |
-| `double-face-cashmere-long-coat-women` | https://unsplash.com/photos/woman-wearing-brown-single-breasted-coat-standing-in-front-of-gray-brick-wall-zkHv9pvrE9U |
-| `double-breasted-wool-blazer-women` | https://unsplash.com/photos/young-woman-in-black-blazer-standing-against-a-white-wall-3_ZeD-2ITEs |
+| `double-face-cashmere-long-coat-women` | https://unsplash.com/photos/woman-in-brown-coat-and-gray-pants-standing-on-white-concrete-staircase-DsKcWDk6NEU |
+| `double-breasted-wool-blazer-women` | https://unsplash.com/photos/young-woman-with-flowing-blonde-hair-wearing-a-beige-suit-h8fJcfaARJg |
 | `fluid-silk-wide-leg-trousers-women` | https://unsplash.com/photos/a-woman-poses-elegantly-on-a-wooden-stool-8FruAR7J1Ow |
-| `double-face-cashmere-crewneck-women` | https://unsplash.com/photos/a-woman-wearing-a-beige-sweater-and-pants-rz3sw-8VNCw |
+| `double-face-cashmere-crewneck-women` | https://unsplash.com/photos/woman-in-gray-sweater-standing-on-brown-field-during-daytime-f5R8nfQzPq8 |
 | `silk-crepe-de-chine-shirt-women` | https://unsplash.com/photos/a-woman-with-curly-hair-wearing-a-white-blouse-09iQ8pafMXU |
-| `linen-voile-wrap-dress-women` | https://unsplash.com/photos/woman-in-white-tank-top-standing-on-sea-shore-during-daytime-CWKRCrBsgB4 |
-| `silk-charmeuse-slip-dress-women` | https://unsplash.com/photos/woman-in-black-spaghetti-strap-dress-GNd5gstTSg8 |
-| `wool-silk-suit-jacket-men` | https://unsplash.com/photos/man-in-blue-suit-standing-Ci_fZ5cL9Jo |
-| `selvedge-denim-jeans-men` | https://unsplash.com/photos/a-pair-of-jeans-laying-on-a-tile-floor-jll9ZPrAVms |
-| `pleated-wool-trousers-men` | https://unsplash.com/photos/a-man-in-a-suit-and-tie-walking-down-a-street-L3473EOotp4 |
-| `merino-roll-neck-men` | https://unsplash.com/photos/man-in-black-suit-jacket-P43ZFLGgH38 |
-| `cotton-poplin-shirt-men` | https://unsplash.com/photos/man-in-white-button-up-shirt-GDebkNryTd4 |
+| `linen-voile-wrap-dress-women` | https://unsplash.com/photos/young-woman-in-white-dress-leaning-against-wooden-wall-ZTO2YSqlxnM |
+| `silk-charmeuse-slip-dress-women` | https://unsplash.com/photos/woman-in-black-spaghetti-strap-dress-nh3SsL7_BNw |
+| `wool-silk-suit-jacket-men` | https://unsplash.com/photos/a-man-in-a-suit-sitting-in-a-chair-HPNHsdzZKR8 |
+| `selvedge-denim-jeans-men` | https://unsplash.com/photos/person-in-leather-jacket-and-jeans-g9nI32Nuj6I |
+| `pleated-wool-trousers-men` | https://unsplash.com/photos/man-walking-on-cobblestone-street-02e96bYh4q8 |
+| `merino-roll-neck-men` | https://unsplash.com/photos/man-in-beige-blazer-and-turtleneck-n_2BpUTKZzM |
+| `cotton-poplin-shirt-men` | https://unsplash.com/photos/a-couple-stands-on-a-balcony-with-lush-foliage-eXBlGNmCW-Q |
 | `folded-calfskin-shoulder-bag-women` | https://unsplash.com/photos/a-black-bag-on-a-white-surface-o65-HVetXJ4 |
 | `gabardine-trench-coat-women` | https://unsplash.com/photos/a-woman-in-a-trench-coat-standing-in-an-empty-building-9B5dtT0ROG4 |
 | `wool-gabardine-tailored-trousers-women` | https://unsplash.com/photos/person-sitting-on-brown-wooden-chair-hLEfD4-8G4I |
 | `cotton-poplin-boyfriend-shirt-women` | https://unsplash.com/photos/white-polo-shirt-hanged-on-brown-wooden-cabinet-ve2dwNxZ5Rg |
 | `pleated-silk-crepe-gown-women` | https://unsplash.com/photos/woman-in-elegant-blue-dress-with-back-tattoo-oVnL3TRkzDg |
-| `straw-panama-hat-men` | https://unsplash.com/photos/a-stylish-hat-rests-atop-a-wooden-form-1dPdmg6x448 |
-| `canvas-and-leather-weekender-men` | https://unsplash.com/photos/brown-leather-duffel-bag-in-middle-on-gray-asphalt-road-PpzBE1hWeGI |
-| `calfskin-belt-men` | https://unsplash.com/photos/a-close-up-of-a-belt-qTv4ePux4ck |
-| `leather-low-top-sneaker-men` | https://unsplash.com/photos/pair-of-white-low-top-sneakers-IpSk8rGM64Q |
+| `straw-panama-hat-men` | https://unsplash.com/photos/shallow-focus-photo-of-person-in-black-sleeveless-shirt-near-body-of-water-4S0imhdB7Uo |
+| `canvas-and-leather-weekender-men` | https://unsplash.com/photos/person-holding-brown-leather-handbag-lFvkXTEYS4s |
+| `calfskin-belt-men` | https://unsplash.com/photos/a-pair-of-brown-leather-belts-sitting-on-top-of-a-white-piece-of-paper-rH16wMV8ImM |
+| `leather-low-top-sneaker-men` | https://unsplash.com/photos/person-holding-white-nike-low-top-sneakers-PUw24-taMKc |
 | `leather-court-sneaker-women` | https://unsplash.com/photos/pair-of-white-low-top-sneakers-IpSk8rGM64Q |
-| `calfskin-derby-men` | https://unsplash.com/photos/a-pair-of-black-shoes-on-a-white-background-1iQUP9axQ_Y |
-| `down-filled-wool-parka-men` | https://unsplash.com/photos/man-in-black-zip-up-jacket-and-blue-denim-jeans-standing-beside-gray-concrete-wall-during-uLWk3kDXBgU |
-| `shearling-collar-suede-bomber-men` | https://unsplash.com/photos/man-in-brown-leather-jacket-wearing-black-sunglasses-bE6OvxczIc8 |
-| `linen-bermuda-men` | https://unsplash.com/photos/a-row-of-white-pants-hanging-on-a-clothes-line-A8nR5I0dF2E |
-| `linen-drawstring-trousers-men` | https://unsplash.com/photos/a-stylish-man-poses-with-folded-arms-9GqMLuNFWCw |
-| `silk-evening-shirt-men` | https://unsplash.com/photos/a-man-wearing-a-suit-and-tie-KGwA-9S4lNo |
+| `calfskin-derby-men` | https://unsplash.com/photos/mens-black-dress-shoes-cologne-and-bow-tie-TjrW-yHmL6o |
+| `down-filled-wool-parka-men` | https://unsplash.com/photos/woman-hands-on-jackets-pocket-Jr_cb6kPUxM |
+| `shearling-collar-suede-bomber-men` | https://unsplash.com/photos/a-close-up-of-a-jacket-with-a-label-on-it-6dejojG4QEQ |
+| `linen-bermuda-men` | https://unsplash.com/photos/a-couple-of-men-standing-next-to-each-other-kSAsxxY-HwE |
+| `linen-drawstring-trousers-men` | https://unsplash.com/photos/a-man-standing-in-a-doorway-with-his-hands-in-his-pockets-Xhvbh9d4bho |
+| `silk-evening-shirt-men` | https://unsplash.com/photos/man-in-white-shirt-with-jacket-draped-over-shoulders-89buga-M110 |
 | `silk-twill-scarf-90-women` | https://unsplash.com/photos/a-scrunchie-with-an-avocado-and-orange-slice-6Slg2fOeaQ0 |
 | `woven-raffia-tote-women` | https://unsplash.com/photos/a-basket-with-a-plant-in-it-Ak7lAuarT1I |
 | `leather-strappy-sandal-women` | https://unsplash.com/photos/black-patent-leather-high-heel-sandals-aTNcFxR3M10 |
@@ -168,11 +168,8 @@ the mapping is in `store/photo_credits.py`. A photo uploaded in `/admin/` overri
 | `cable-knit-cashmere-cardigan-women` | https://unsplash.com/photos/woman-in-white-cardigan-sitting-on-beach-during-daytime-pJ3DtntO-LQ |
 | `featherweight-cashmere-tee-women` | https://unsplash.com/photos/a-woman-posing-for-a-picture-with-her-hands-on-her-hips-_k_uEf2xVF0 |
 | `cashmere-rib-column-dress-women` | https://unsplash.com/photos/a-woman-in-a-dress-JErC76g3ZFU |
-| `story/cloth` | https://unsplash.com/photos/pile-of-cloth-on-white-surface-4byBtNuIyIg |
-| `story/leather` | https://unsplash.com/photos/a-leather-wallet-a-comb-thread-and-scissors-on-a-table-rhP8U-86GZA |
-| `story/stitch` | https://unsplash.com/photos/hands-sewing-white-fabric-5ZQn_gWKvLE |
-| `story/atelier` | https://unsplash.com/photos/a-room-filled-with-mannequins-and-sewing-machines-HIrP05jnXNs |
-| `story/paris` | https://unsplash.com/photos/gray-landmark-building-UO02gAW3c0c |
+
+The home-page story frames (`static/img/story/`) are the owner's own keyframes, generated in Google Flow.
 
 ## Scroll film (optional)
 

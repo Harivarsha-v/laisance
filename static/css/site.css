@@ -805,3 +805,12 @@ body { font-size: 15px; line-height: 1.65; letter-spacing: .005em; }   /* Body *
 @media (prefers-reduced-motion: reduce) {
   .story-frame { transition: opacity .2s; transform: none !important; }
 }
+
+/* story frames: opacity and push-in are set from scroll position in site.js */
+.story-frame { transition: none; opacity: 0; transform: scale(1.1); will-change: opacity, transform; }
+.story-frame.is-active { opacity: 0; transform: scale(1.1); }
+
+/* hero copy sits at the top, level with the first plate, instead of sinking to the bottom */
+@media (min-width: 861px) {
+  .hero-copy { align-self: start; justify-content: flex-start; padding-top: clamp(8px, 1vw, 16px); }
+}

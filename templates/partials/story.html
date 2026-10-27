@@ -1,15 +1,15 @@
 {% load static %}
-{# Scroll story: a pinned full-screen stage behind five chapters. With static/video/atelier.mp4 present, #}
+{# Scroll story: a pinned full-screen stage behind seven chapters. With static/video/atelier.mp4 present, #}
 {# scrolling scrubs the film; without it, the chapter photographs crossfade. See static/js/site.js (story). #}
 <section class="story" data-story aria-label="How a piece is made">
   <div class="story-stage" aria-hidden="true">
     {% if has_film %}
-      <video class="story-film" src="{% static 'video/atelier.mp4' %}" poster="{% static 'img/story/cloth.jpg' %}"
+      <video class="story-film" src="{% static 'video/atelier.mp4' %}" poster="{% static 'img/story/01-fibre.jpg' %}"
              muted playsinline preload="auto" tabindex="-1"></video>
     {% endif %}
     <div class="story-frames">
       {% for key in story_frames %}
-        <img class="story-frame{% if forloop.first %} is-active{% endif %}" src="{% static 'img/story/'|add:key|add:'.jpg' %}" alt="" decoding="async" {% if not forloop.first %}loading="lazy"{% endif %}>
+        <img class="story-frame" src="{% static 'img/story/'|add:key|add:'.jpg' %}" alt="" decoding="async" {% if forloop.counter > 2 %}loading="lazy"{% endif %}>
       {% endfor %}
     </div>
     <div class="story-veil"></div>
@@ -19,28 +19,38 @@
   <div class="story-chapters">
     <article class="chapter" data-frame="0">
       <p class="chapter-num">I</p>
-      <h2 class="display h-lg">The cloth</h2>
-      <p>It begins in Biella, where the mills have spun wool for six centuries. We choose each bolt by hand: double-face cashmere, two layers woven as one, so the coat needs no lining at all.</p>
+      <h2 class="display h-lg">The fibre</h2>
+      <p>On the high grasslands of Inner Mongolia, the goats grow a winter down finer than any wool. Each spring it is combed out by hand, never shorn, a few grams from each animal.</p>
     </article>
     <article class="chapter" data-frame="1">
       <p class="chapter-num">II</p>
-      <h2 class="display h-lg">The leather</h2>
-      <p>From a family tannery in Tuscany, box calfskin is tanned slowly with bark and time. It arrives stiff and pale, and softens to your hand over years, not days.</p>
+      <h2 class="display h-lg">The cloth</h2>
+      <p>In Biella, in the Italian Alps, the mills spin it with mountain water and weave it twice over: two faces of cashmere bound as one, so the coat needs no lining at all.</p>
     </article>
     <article class="chapter" data-frame="2">
       <p class="chapter-num">III</p>
-      <h2 class="display h-lg">The hand</h2>
-      <p>Every collar is shaped over the knee and every buttonhole sewn by hand, some forty minutes each. A single coat passes through eleven pairs of hands before it is finished.</p>
+      <h2 class="display h-lg">The finish</h2>
+      <p>The nap is raised slowly with dried teasel heads, as it has been for centuries, until the cloth is soft enough that a mill master will put his name to it.</p>
     </article>
     <article class="chapter" data-frame="3">
       <p class="chapter-num">IV</p>
-      <h2 class="display h-lg">The atelier</h2>
-      <p>Behind the salon, our workroom keeps the patterns of every piece we have made. Nothing is cut by machine, and nothing leaves until it falls exactly as it should.</p>
+      <h2 class="display h-lg">The details</h2>
+      <p>From a family tannery in Tuscany, vegetable-tanned calfskin for the facings, and buttons of real horn, each one polished by hand.</p>
     </article>
     <article class="chapter" data-frame="4">
       <p class="chapter-num">V</p>
+      <h2 class="display h-lg">The cut</h2>
+      <p>In our Paris atelier the pattern is drawn on kraft paper and the cloth is cut with long steel shears, in a single unhurried line.</p>
+    </article>
+    <article class="chapter" data-frame="5">
+      <p class="chapter-num">VI</p>
+      <h2 class="display h-lg">The hand</h2>
+      <p>The two faces are parted at every edge, folded in and closed with invisible stitches. A single coat passes through eleven pairs of hands.</p>
+    </article>
+    <article class="chapter" data-frame="6">
+      <p class="chapter-num">VII</p>
       <h2 class="display h-lg">Paris</h2>
-      <p>Made in small numbers, in the house where it was drawn. Then it is yours, to be worn for decades and still feel effortless.</p>
+      <p>Finished in the house where it was drawn, in numbers small enough to know each one. Then it is yours, to be worn for decades and still feel effortless.</p>
       <a class="link-u" href="{% url 'shop' 'women' %}">Discover the collection <span class="arrow">→</span></a>
     </article>
   </div>
