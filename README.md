@@ -12,6 +12,68 @@ when it can't answer.
 
 ---
 
+## About the project
+
+L’Aisance (French for "ease" or "graceful movement") is a **demo web app for a fictional luxury clothing house** based
+in Paris. It is built to feel like the website of a real maison in the spirit of Hermès or COS: quiet, editorial and
+unhurried, with prices to match (cashmere coats from around $8,000). It sells nothing. No payment is taken, and the
+checkout only records a demo order. It shows how a Django site can deliver a polished retail experience and build
+practical AI features straight into the code, with no paid AI service.
+
+### The experience
+
+- **Home page as a story.** Under the opening "The art of ease." and two editorial photographs, the page becomes
+  a full-screen scroll story in seven chapters: *The fibre, The cloth, The finish, The details, The cut, The hand,
+  Paris*. Each chapter follows a coat from the cashmere goats of Inner Mongolia, through the mills of Biella and a
+  Tuscan tannery, to the atelier in Paris. The images dissolve into one another and slowly push in as you scroll, like
+  a film, with a progress line along the bottom. People who prefer reduced motion get the story without the movement.
+  After the story come the autumn pieces, a preview of the stylist, Women and Men entry plates, and the house
+  signatures.
+- **A curated collection.** Women's and men's collections of about 47 pieces in all (coats, tailoring, knitwear, silk,
+  shirts, trousers, shoes, bags and accessories), each with a photograph, materials, colours and seasons. There are
+  deliberately no shopper filters: the collection is small and edited, and the only browsing is by category tab.
+- **Product pages.** Colour and size selection, a size advisor that suggests a size from height, weight and preferred fit,
+  "Complete the look" pairings with a written reason for each, AI-written product copy, and structured data for search
+  engines. Limited-edition pieces are one per client, and trying to add a second triggers the house's own error code,
+  **LA-470**.
+- **Private stylist.** A conversational stylist on its own page and on the home page. Describe the occasion, budget
+  and colours ("a wedding in Capri, something for her, under ten thousand") and it puts together a complete look from
+  the collection, explains why it works, and refines it ("a lighter budget", "another look", "in black"). The whole
+  look can go into the bag in one click.
+- **Client-care assistant.** A chat widget on every page, styled like a concierge's note. It answers questions from the
+  FAQ database, explains any error code, hands styling questions to the stylist, and opens a support ticket (with a
+  reference such as `LA-00012`) when it can't help. Every answer can be rated "helpful" or "not helpful".
+- **Client care pages.** An FAQ page grouped by topic, a page explaining every error code the site can return, and a
+  contact form that creates a ticket.
+- **Prices in five currencies.** USD, EUR, GBP, CHF and JPY, converted live from an exchange-rate API, with fallbacks
+  if the API is slow or down.
+- **Bag, checkout and account.** An AJAX bag, a demo checkout, and sign-up and sign-in with an order history.
+- **Error pages that help.** Custom 400, 403, 404, 429, 500 and 503 pages in the house style, each with an
+  "Ask the assistant" button that opens the widget already asking what the error means.
+- **Search.** A full-screen search overlay that understands natural phrases like "a black coat under 5k".
+
+### Design
+
+- Typography pairs EB Garamond (display and editorial text) with Jost (navigation and details), on one consistent type
+  scale.
+- A warm palette of paper, ink and camel, with generous margins, hairline rules and photography in the lead.
+- Motion is restrained and purposeful: soft reveals, a scroll-driven story, and nothing that bounces.
+- Responsive from phones to wide desktops, keyboard-accessible (focus states and a focus-trapped search), and
+  respectful of reduced-motion settings.
+
+### Technology
+
+- **Backend:** Django, with SQLite locally and PostgreSQL in production through `DATABASE_URL`.
+- **AI:** pure Python in `store/ai/`: TF-IDF retrieval for FAQs and search, intent and budget parsing, colour, style
+  and season harmony scoring for outfits, and template-based copywriting.
+- **MongoDB Atlas** for chat logs and feedback, with a local file fallback.
+- **Frankfurter** exchange-rate API with a timeout, a cache and fallbacks.
+- **Security and operations:** a Content Security Policy and security headers, CSRF protection, rate limiting,
+  request logging, a maintenance mode and a health check page.
+- **Deployment:** Render (gunicorn and whitenoise), with configuration through environment variables.
+
+---
+
 ## How the assessment requirements are met
 
 | Requirement | Where |
