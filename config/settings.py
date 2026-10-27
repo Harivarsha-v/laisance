@@ -90,8 +90,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # SQL: SQLite locally, Postgres (or any DATABASE_URL) in production
 DATABASES = {
-    "default": dj_database_url.config(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}", conn_max_age=600)
+    "default": dj_database_url.config(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+                                      conn_max_age=0 if ON_VERCEL else 600)
 }
+if ON_VERCEL:  # Neon's pooled connection (PgBouncer) can't hold server-side cursors
+    DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True
 
 # MongoDB: chat logs and feedback from the assistant
 MONGODB_URI = os.environ.get("MONGODB_URI", "")
