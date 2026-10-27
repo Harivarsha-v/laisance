@@ -609,23 +609,6 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 body { font-size: 14px; letter-spacing: 0; }
 .eyebrow { font-weight: 500; }
 
-/* plates: the product on a paper sweep, like a catalogue photograph */
-.art--drawn {
-  background:
-    radial-gradient(120% 80% at 50% 12%, rgba(255, 255, 255, .55), transparent 60%),
-    radial-gradient(90% 60% at 50% 100%, rgba(80, 64, 44, .08), transparent 70%),
-    var(--sweep, #e9e3d8);
-}
-.art--drawn::before { opacity: .35; }
-.art--drawn svg.flatlay { position: absolute; inset: 7% 11% 9%; width: 78%; height: 84%; overflow: visible;
-  transition: transform var(--dur-crawl) var(--ease-out); }
-.card:hover .art--drawn svg.flatlay { transform: translateY(-5px) scale(1.015); }
-.art figcaption { display: none; }
-.art--plate figcaption {
-  display: flex; left: 18px; right: 18px; bottom: 16px; color: var(--ink-2); opacity: 1;
-  font: 400 11px/1.3 var(--sans); letter-spacing: .02em; text-transform: none;
-}
-.art--plate figcaption span:last-child { font: italic 400 13px/1 var(--serif); }
 
 /* hero: words on the left, one plate on the right */
 .hero { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(24px, 4vw, 72px); padding: clamp(28px, 4vw, 64px) var(--gutter) 0;
@@ -682,7 +665,6 @@ body { font-size: 14px; letter-spacing: 0; }
 .dip .art { aspect-ratio: 4 / 5; }
 .dip-label { color: var(--ink); left: clamp(20px, 3vw, 40px); bottom: clamp(20px, 3vw, 36px); }
 .dip-label .link-u { color: var(--ink); margin-top: 14px; }
-.diptych .dip:nth-child(2) .art--drawn { --sweep: #ddd6ca; }
 
 .section-head { border-bottom: 1px solid var(--line); padding-bottom: 18px; }
 .page-head .display { margin-top: 0; }
@@ -704,13 +686,10 @@ body { font-size: 14px; letter-spacing: 0; }
 /* diptych labels sit under the plate like a caption, not on top of the garment */
 .dip-label { position: static; display: flex; justify-content: space-between; align-items: baseline; padding-top: 16px; }
 .dip-label .link-u { margin-top: 0; }
-/* product gallery: the second plate is a close-up of the cloth */
-.gallery .art--detail svg.flatlay { transform: scale(2.9); transform-origin: 52% 38%; }
-.gallery .art--detail::after { content: "Detail"; position: absolute; left: 16px; bottom: 14px; font: italic 400 13px/1 var(--serif); color: var(--ink-2); }
 
 .hero-index a { transition: transform var(--dur-slow) var(--ease-out); display: flex; }
 @media (prefers-reduced-motion: reduce) {
-  .card:hover .art--drawn svg.flatlay, .hero-index a:hover, .care-nav a:hover { transform: none; }
+  .card:hover .art svg, .hero-index a:hover, .care-nav a:hover { transform: none; }
 }
 /* the search input's default 20-character width overflowed phones */
 .search-panel { overflow-x: hidden; }
@@ -725,3 +704,9 @@ body { font-size: 14px; letter-spacing: 0; }
 /* Bodoni is wider than the old face: size the footer wordmark to fit any screen */
 .footer { overflow: hidden; }
 .footer-mark { font-size: clamp(48px, 14.5vw, 260px); letter-spacing: .04em; white-space: nowrap; }
+
+/* illustration sizing (restored) */
+.art--detail svg { transform: scale(2.1) translate(4%, 14%); }
+.art--hero svg, .art--plate svg { inset: 8% 12% 6%; width: 76%; height: 86%; }
+.gallery .art--hero svg { inset: 10% 16% 8%; width: 68%; height: 82%; }
+.dip .art figcaption { display: none; }

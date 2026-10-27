@@ -172,12 +172,11 @@
   $$("[data-color-label]").forEach((label) => {
     $$("input[name=color]").forEach((r) => r.addEventListener("change", () => {
       label.textContent = r.value;
-      // repaint the flat-lay: the garment fill and straps carry the swatch colour
       $$(".gallery .art--drawn").forEach((fig) => {
-        const prev = fig.dataset.swatch;
-        $$(`[fill="${prev}"]`, fig).forEach((el) => el.setAttribute("fill", r.dataset.hex));
-        $$(`[stroke="${prev}"]`, fig).forEach((el) => el.setAttribute("stroke", r.dataset.hex));
-        fig.dataset.swatch = r.dataset.hex;
+        fig.style.setProperty("--swatch", r.dataset.hex);
+        fig.style.setProperty("--ink", r.dataset.ink);
+        $("svg", fig).setAttribute("stroke", r.dataset.ink);
+        $$("figcaption", fig).forEach((c) => (c.style.color = r.dataset.ink));
       });
     }));
   });
