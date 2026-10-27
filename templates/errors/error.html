@@ -1,0 +1,19 @@
+{% extends minimal|yesno:"errors/minimal_base.html,base.html" %}
+{% block title %}{{ code }} · {{ title }} · {{ BRAND_NAME }}{% endblock %}
+
+{% block content %}
+<section class="error-page">
+  <p class="eyebrow">Error {{ code }}</p>
+  <h1 class="display error-code">{{ code }}</h1>
+  <h2 class="display h-md"><em>{{ title }}</em></h2>
+  {% if message %}<p class="lede" style="margin:20px auto 0">{{ message }}</p>{% endif %}
+  {% if what_to_do %}<p class="muted" style="max-width:46ch;margin:16px auto 0">{{ what_to_do }}</p>{% endif %}
+  <div class="error-actions">
+    {% if not minimal %}
+      <button class="btn" type="button" data-ask="{{ assistant_prompt|default:'' }}" data-ask-open><span>Ask the assistant</span></button>
+    {% endif %}
+    <a class="btn btn--ghost" href="/"><span>Return to the maison</span></a>
+  </div>
+  {% if not minimal %}<p class="muted" style="margin-top:28px;font-size:12px"><a class="link-u" href="/help/error-codes/">All error codes</a></p>{% endif %}
+</section>
+{% endblock %}

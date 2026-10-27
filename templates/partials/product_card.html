@@ -1,0 +1,9 @@
+{% load store_extras %}
+<a class="card" href="{{ product.get_absolute_url }}">
+  <div class="card-art">{% garment product %}</div>
+  <div class="card-meta">
+    <span class="card-name">{{ product.name }}</span>
+    <span class="card-price">{{ product.price|money }}</span>
+  </div>
+  {% if product.is_limited %}<p class="card-flag">Limited edition</p>{% elif product.is_new %}<p class="card-flag">Nouveauté</p>{% endif %}
+</a>

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Sign in · {{ BRAND_NAME }}{% endblock %}
+
+{% block content %}
+<div class="narrow">
+  <p class="eyebrow">Welcome back</p>
+  <h1 class="display h-lg" style="margin:14px 0 40px">Sign <em>in</em></h1>
+  <form method="post">
+    {% csrf_token %}
+    {% if form.non_field_errors %}<ul class="errorlist" style="margin-bottom:20px">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+    <div class="float"><input type="text" name="username" id="id_username" placeholder=" " autocomplete="username" required autofocus><label for="id_username">Username</label></div>
+    <div class="float"><input type="password" name="password" id="id_password" placeholder=" " autocomplete="current-password" required><label for="id_password">Password</label></div>
+    <input type="hidden" name="next" value="{{ next }}">
+    <button class="btn btn--block" type="submit"><span>Sign in</span></button>
+  </form>
+  <p class="muted" style="margin-top:28px">New here? <a class="link-u" href="{% url 'signup' %}">Create an account</a></p>
+</div>
+{% endblock %}

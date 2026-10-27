@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load store_extras %}
+{% block title %}{{ product.name }} · {{ BRAND_NAME }}{% endblock %}
+{% block description %}{{ product.description|truncatechars:150 }}{% endblock %}
+
+{% block content %}
+<div class="pdp">
+  <div class="gallery">
+    {% garment product css_class="art--hero" %}
+    {% garment product css_class="art--detail" label=False %}
+    <figure class="art" style="display:grid;place-items:center;background:var(--paper-2)">
+      <div style="text-align:center;padding:24px">
+        <p class="eyebrow">Composition</p>
+        <p class="display h-sm" style="margin-top:10px"><em>{{ product.material|default:"Fine fabric" }}</em></p>
+      </div>
+    </figure>
+  </div>
+
+  <div class="buy">
+    <nav class="crumbs eyebrow" aria-label="Breadcrumb">
+      <a class="muted" href="{% url 'shop' product.department %}">{{ product.get_department_display }}</a><span class="muted">/</span>
+      <a class="muted" href="{% url 'shop_category' product.department product.category.slug %}">{{ product.category.name }}</a>
+    </nav>
+    {% if product.is_limited %}<p class="tag-new" style="margin:0">Limited edition · one per client</p>{% elif product.is_new %}<p class="tag-new" style="margin:0">Nouveauté</p>{% endif %}
+    <h1 class="display h-md">{{ product.name }}</h1>
+    <p class="price">{{ product.price|money }}</p>
+
+    <form method="post" action="{% url 'cart_add' product.id %}" data-ajax-cart>
+      {% csrf_token %}
+      <div class="option-label"><span class="eyebrow">Colour · <span data-color-label>{{ product.color_list.0 }}</span></span></div>
+      <div class="swatches">
+        {% for c in product.color_list %}
+          <label title="{{ c|title }}"><input type="radio" name="color" value="{{ c }}" data-hex="{{ c|color_hex }}" data-ink="{{ c|ink_for }}" {% if forloop.first %}checked{% endif %}><span class="dot" style="background:{{ c|color_hex }}"></span></label>
+        {% endfor %}
+      </div>
+
+      <div class="option-label">
+        <span class="eyebrow">Size</span>
+        {% if show_size_advisor %}<button type="button" data-advisor-toggle>✦ Find my size with AI</button>{% endif %}
+      </div>
+      <div class="sizes">
+        {% for s in product.size_list %}
+          <label><input type="radio" name="size" value="{{ s }}" {% if product.size_list|length == 1 %}checked{% endif %} required><span>{{ s }}</span></label>
+        {% endfor %}
+      </div>
+
+      <div class="buy-actions">
+        <button class="btn btn--block" type="submit"><span>Add to bag</span></button>
+        <a class="btn btn--ghost btn--block" href="{% url 'stylist' %}?q={{ 'Style the '|add:product.name|add:' for '|add:product.get_department_display|urlencode }}"><span>Style it with the stylist</span></a>
+      </div>
+    </form>
+
+    {% if show_size_advisor %}
+    <div class="advisor" data-product="{{ product.id }}">
+      <form>
+        <div class="advisor-row">
+          <div class="field"><label for="adv-h">Height (cm)</label><input id="adv-h" name="height" type="number" min="120" max="230" placeholder="170" required></div>
+          <div class="field"><label for="adv-w">Weight (kg)</label><input id="adv-w" name="weight" type="number" min="30" max="250" placeholder="62" required></div>
+          <div class="field"><label for="adv-f">Fit</label>
+            <select id="adv-f" name="fit"><option value="regular">Regular</option><option value="slim">Close</option><option value="relaxed">Relaxed</option></select>
+          </div>
+          <button class="btn" type="submit"><span>Advise</span></button>
+        </div>
+      </form>
+      <p class="result"></p>
+    </div>
+    {% endif %}
+
+    <div class="accordion">
+      <details open>
+        <summary>Description</summary>
+        <div class="body">
+          <p>{{ product.description }}</p>
+          <p class="ai-note"><span class="spark"></span> Described by our in-house AI</p>
+        </div>
+      </details>
+      <details>
+        <summary>Composition &amp; care</summary>
+        <div class="body"><p>{{ product.material|default:"See label" }}. We recommend professional cleaning by a specialist. Store folded, in the cotton dust bag provided. Complimentary aftercare and repairs for the life of the piece.</p></div>
+      </details>
+      <details>
+        <summary>Delivery &amp; returns</summary>
+        <div class="body"><p>Complimentary express delivery, presented in our signature box. Returns are collected from your door within 30 days.</p></div>
+      </details>
+    </div>
+  </div>
+</div>
+
+{% if look %}
+<section class="look">
+  <div class="look-grid">
+    <div class="reveal">
+      <p class="eyebrow"><span class="spark"></span>&nbsp; Complete the look</p>
+      <h2 class="display h-lg" style="margin-top:16px">To wear <em>with it</em></h2>
+      <p class="lede" style="margin-top:20px">Our stylist has paired the {{ product.name|lower }} with pieces that share its palette, its spirit and its season.</p>
+    </div>
+    <div class="look-items reveal-stagger">
+      {% for item in look %}
+        <div>
+          {% with product=item.product %}{% include "partials/product_card.html" %}{% endwith %}
+          <p class="look-reason">{{ item.reason|capfirst }}.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if similar %}
+<section class="look">
+  <div class="section-head"><h2 class="display h-md">From the <em>same</em> family</h2></div>
+  <div class="grid reveal-stagger">
+    {% for product in similar %}{% include "partials/product_card.html" %}{% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

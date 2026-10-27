@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Service status · {{ BRAND_NAME }}{% endblock %}
+
+{% block content %}
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Health check</p>
+    <h1 class="display h-xl">Service <em>status</em></h1>
+  </div>
+  <p class="status-pill status-{{ health.status }}">{{ health.status|upper }}</p>
+</header>
+
+<div class="wrap">
+  <p class="muted">Uptime {{ health.uptime_s }}s · Python {{ health.versions.python }} · Django {{ health.versions.django }} · <a class="link-u" href="{% url 'health_json' %}">JSON</a></p>
+  <div class="health-grid">
+    {% with c=health.checks.database %}
+    <article class="health-card"><p class="eyebrow">SQL database</p><p class="health-state {{ c.ok|yesno:'ok,bad' }}">{{ c.ok|yesno:"Operational,Unavailable" }}</p>
+      <p class="muted">{% if c.ok %}{{ c.engine }} · {{ c.latency_ms }} ms · {{ c.products }} pieces · {{ c.faqs }} FAQs · {{ c.error_codes }} error codes · {{ c.open_tickets }} open tickets{% else %}{{ c.error }}{% endif %}</p></article>
+    {% endwith %}
+    {% with c=health.checks.mongodb %}
+    <article class="health-card"><p class="eyebrow">MongoDB · chat logs &amp; feedback</p><p class="health-state {{ c.ok|yesno:'ok,warn' }}">{{ c.ok|yesno:"Operational,Fallback" }}</p>
+      <p class="muted">{{ c.store }} · {{ c.detail }}{% for k, v in c.counts.items %} · {{ v }} {{ k }}{% endfor %}</p></article>
+    {% endwith %}
+    {% with c=health.checks.exchange_rate_api %}
+    <article class="health-card"><p class="eyebrow">Exchange-rate API (third party)</p><p class="health-state {{ c.ok|yesno:'ok,warn' }}">{{ c.ok|yesno:"Operational,Fallback" }}</p>
+      <p class="muted">Source: {{ c.source }}{% if c.latency_ms %} · {{ c.latency_ms }} ms{% endif %} · time limit {{ c.timeout_s }}s{% if c.error %} · {{ c.error }}{% endif %}</p></article>
+    {% endwith %}
+    {% with c=health.checks.requests %}
+    <article class="health-card"><p class="eyebrow">Request log</p><p class="health-state ok">{{ c.total_since_start }} requests</p>
+      <p class="muted">{{ c.server_errors }} server errors · average {{ c.avg_ms_last_50|default:"–" }} ms (last 50)</p></article>
+    {% endwith %}
+  </div>
+
+  <h2 class="display h-sm" style="margin:56px 0 16px">Recent requests</h2>
+  <div class="req-table" role="table">
+    {% for r in recent %}
+      <div role="row"><span>{{ r.method }}</span><span>{{ r.path }}</span><span class="{% if r.status >= 500 %}bad{% elif r.status >= 400 %}warn{% endif %}">{{ r.status }}</span><span>{{ r.ms }} ms</span></div>
+    {% empty %}<p class="muted">No requests logged yet.</p>{% endfor %}
+  </div>
+</div>
+{% endblock %}

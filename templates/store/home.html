@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load store_extras %}
+{% block title %}{{ BRAND_NAME }} · Maison de Couture, Paris{% endblock %}
+{% block header_class %}{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Collection Automne–Hiver &nbsp;·&nbsp; Paris</p>
+    <h1 class="display h-xl split-words">The art<br>of <em>ease.</em></h1>
+    <div class="hero-foot">
+      <p class="lede">Cashmere that moves as you do. Tailoring that forgets it is tailored. A small collection, made slowly, for a life lived gracefully.</p>
+      <nav class="hero-index" aria-label="Shop">
+        <a href="{% url 'shop' 'women' %}"><span>01</span>Women</a>
+        <a href="{% url 'shop' 'men' %}"><span>02</span>Men</a>
+        <a href="{% url 'stylist' %}"><span>03</span>Private styling</a>
+      </nav>
+    </div>
+  </div>
+  <div class="hero-stage" aria-hidden="true">
+    <div class="stamp">Automne<br>Hiver</div>
+    {% for p in hero %}
+      <a class="a{{ forloop.counter }}" href="{{ p.get_absolute_url }}" tabindex="-1">{% garment p css_class="art--hero" %}</a>
+    {% endfor %}
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    {% for i in "12" %}
+      <span>Double-face cashmere</span><b>Biella</b><span>Silk charmeuse</span><b>Lyon</b>
+      <span>Linen voile</span><b>Normandy</b><span>Box calfskin</span><b>Tuscany</b><span>Finished by hand</span><b>Paris</b>
+    {% endfor %}
+  </div>
+</div>
+
+<section class="section wrap manifesto">
+  <p class="eyebrow reveal">La Maison</p>
+  <p class="big reveal">Ease is the rarest luxury. We cut cloth to follow the body, never to hold it, so that a coat, a shirt, a single silk scarf may be worn for decades and still feel <em>effortless</em>.</p>
+  <p class="muted reveal" style="margin:0">Each season we release only a handful of pieces, made in limited numbers by the ateliers that have mastered them. Our private stylist, an AI that lives on our own servers, knows every one of them by heart.</p>
+</section>
+
+<section class="wrap">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Nouveautés</p>
+      <h2 class="display h-lg" style="margin-top:12px">The <em>autumn</em> pieces</h2>
+    </div>
+    <a class="link-u" href="{% url 'search' %}?q=new">The full season <span class="arrow">→</span></a>
+  </div>
+  <div class="edit-grid reveal-stagger">
+    {% for product in new_in|slice:":7" %}{% include "partials/product_card.html" %}{% endfor %}
+  </div>
+</section>
+
+<section class="band section" style="margin-top:clamp(72px,10vw,160px)">
+  <div class="wrap band-grid">
+    <div class="reveal">
+      <p class="eyebrow"><span class="spark"></span>&nbsp; Private styling</p>
+      <h2 class="display h-lg" style="margin:18px 0 26px">Your stylist,<br><em>at any hour.</em></h2>
+      <p class="lede" style="color:rgba(245,241,234,.72)">Describe the occasion, and the colours you love or never wear. Our stylist composes a complete look from the collection, tells you why it works, and refines it with you, as a sales associate in our salon would.</p>
+      <div class="chips" style="margin-top:32px">
+        {% for s in starters %}<a class="chip" href="{% url 'stylist' %}?q={{ s|urlencode }}">{{ s }}</a>{% endfor %}
+      </div>
+    </div>
+    <div class="chat-demo reveal">
+      <div class="bubble me">A wedding in Capri. Something for her, under $10,000.</div>
+      <div class="bubble ai">Let the <strong>Silk Charmeuse Slip Dress</strong> in champagne speak first, with the <strong>Leather Strappy Sandal</strong> underfoot and the <strong>Silk Twill Scarf 90</strong> as the final gesture. Elegant without ever upstaging the couple.</div>
+      <div class="bubble me">Beautiful. Could you show me another?</div>
+      <a class="link-u" href="{% url 'stylist' %}?q={{ 'A wedding in Capri for her, under $10,000'|urlencode }}" style="justify-self:start;margin-top:8px">Continue with the stylist <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="wrap section">
+  <div class="diptych">
+    {% if dip_women %}
+    <a class="dip reveal" href="{% url 'shop' 'women' %}">
+      {% garment dip_women css_class="art--hero" %}
+      <div class="dip-label"><p class="eyebrow" style="color:inherit">La collection</p><h2 class="display h-lg">Women</h2><span class="link-u">Discover <span class="arrow">→</span></span></div>
+    </a>
+    {% endif %}
+    {% if dip_men %}
+    <a class="dip reveal" href="{% url 'shop' 'men' %}">
+      {% garment dip_men css_class="art--hero" %}
+      <div class="dip-label"><p class="eyebrow" style="color:inherit">La collection</p><h2 class="display h-lg">Men</h2><span class="link-u">Discover <span class="arrow">→</span></span></div>
+    </a>
+    {% endif %}
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Les Signatures</p>
+      <h2 class="display h-md" style="margin-top:12px">Pieces made to be <em>kept</em></h2>
+    </div>
+  </div>
+  <div class="grid reveal-stagger">
+    {% for product in featured_women %}{% include "partials/product_card.html" %}{% endfor %}
+    {% for product in featured_men %}{% include "partials/product_card.html" %}{% endfor %}
+  </div>
+</section>
+{% endblock %}

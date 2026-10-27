@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Create an account · {{ BRAND_NAME }}{% endblock %}
+
+{% block content %}
+<div class="narrow">
+  <p class="eyebrow">Join the house</p>
+  <h1 class="display h-lg" style="margin:14px 0 40px">Create an <em>account</em></h1>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="float">
+        <input type="{{ field.field.widget.input_type }}" name="{{ field.html_name }}" id="{{ field.id_for_label }}" value="{{ field.value|default_if_none:'' }}" placeholder=" " {% if field.field.required %}required{% endif %}>
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field.errors }}
+      </div>
+    {% endfor %}
+    <button class="btn btn--block" type="submit"><span>Create account</span></button>
+  </form>
+  <p class="muted" style="margin-top:28px">Already have one? <a class="link-u" href="{% url 'login' %}">Sign in</a></p>
+</div>
+{% endblock %}

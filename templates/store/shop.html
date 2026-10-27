@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{% if category %}{{ category.name }} · {% endif %}{{ department_label }} · {{ BRAND_NAME }}{% endblock %}
+
+{% block content %}
+<header class="page-head">
+  <div>
+    <nav class="crumbs eyebrow" aria-label="Breadcrumb">
+      <a href="{% url 'home' %}" class="muted">{{ BRAND_NAME }}</a><span class="muted">/</span>
+      <a href="{% url 'shop' department %}" class="{% if category %}muted{% endif %}">{{ department_label }}</a>
+      {% if category %}<span class="muted">/</span><span>{{ category.name }}</span>{% endif %}
+    </nav>
+    <h1 class="display h-xl split-words">{% if category %}{{ category.name }}{% else %}{{ department_label }}{% endif %}</h1>
+  </div>
+  <p class="lede" style="text-align:right;max-width:30ch">
+    {% if category %}{{ products|length }} piece{{ products|length|pluralize }} this season.{% else %}The Autumn–Winter collection. {{ products|length }} pieces, made in limited numbers.{% endif %}
+  </p>
+</header>
+
+<nav class="cat-tabs" aria-label="Categories">
+  <a href="{% url 'shop' department %}" class="{% if not category %}is-active{% endif %}">The collection</a>
+  {% for c in categories %}
+    <a href="{% url 'shop_category' department c.slug %}" class="{% if category == c %}is-active{% endif %}">{{ c.name }}</a>
+  {% endfor %}
+</nav>
+<hr class="rule">
+
+{% if products %}
+  <div class="shop-grid grid reveal-stagger">
+    {% for product in products %}{% include "partials/product_card.html" %}{% endfor %}
+  </div>
+{% else %}
+  <div class="empty">
+    <p class="display h-md">This edit is <em>resting</em> for the season.</p>
+    <p class="muted">Explore the rest of the collection, or <a class="link-u" href="{% url 'stylist' %}">speak with the stylist</a>.</p>
+  </div>
+{% endif %}
+{% endblock %}

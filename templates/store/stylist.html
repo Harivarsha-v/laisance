@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Your AI Stylist · {{ BRAND_NAME }}{% endblock %}
+
+{% block content %}
+<div class="stylist">
+  <aside class="stylist-intro">
+    <p class="eyebrow"><span class="spark"></span>&nbsp; Personal styling</p>
+    <h1 class="display h-lg split-words" style="margin-top:18px">Tell us the <em>occasion.</em></h1>
+    <p class="lede" style="margin-top:24px">As in our salon, our stylist listens first: the occasion, the colours you love, what you would like to invest. Then composes a complete look from the collection.</p>
+    <ol>
+      <li><span>Describe the moment: a wedding, the office, a week on the coast.</span></li>
+      <li><span>Mention a budget, a colour, who it is for. Or simply let it ask.</span></li>
+      <li><span>Refine it: “a lighter budget”, “another look”, “in navy”.</span></li>
+      <li><span>Reserve the complete look in a single gesture.</span></li>
+    </ol>
+    <p class="muted" style="margin-top:28px;font-size:12px">The stylist runs entirely on our own servers. No outside AI service sees your conversation.</p>
+  </aside>
+
+  <section class="chat" data-starters='{{ starters_json }}' aria-label="Stylist chat">
+    <div class="chat-head">
+      <span class="eyebrow">{{ BRAND_NAME }} Stylist · <span style="color:var(--accent)">online</span></span>
+      <button type="button" data-chat-reset>Start over</button>
+    </div>
+    <div class="chat-log" aria-live="polite">
+      <div class="msg ai"><div class="txt">Bonjour. I'm your stylist. Where are you going, and is there a budget or a colour I should keep in mind? Choose a starting point below, or tell me in your own words.</div></div>
+    </div>
+    <div class="chat-suggest">
+      {% for s in starters %}<button class="chip" type="button">{{ s }}</button>{% endfor %}
+    </div>
+    <form class="chat-form" autocomplete="off">
+      <input type="text" maxlength="300" placeholder="Dinner in Paris, something black, under $8,000…" aria-label="Message the stylist">
+      <button type="submit">Send</button>
+    </form>
+  </section>
+</div>
+{% endblock %}

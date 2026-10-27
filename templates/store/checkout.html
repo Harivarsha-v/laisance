@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load store_extras %}
+{% block title %}Checkout · {{ BRAND_NAME }}{% endblock %}
+
+{% block content %}
+<header class="page-head"><h1 class="display h-lg">Checkout</h1><p class="eyebrow">Delivery details</p></header>
+<div class="bag">
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% if not user.is_authenticated %}
+      <p class="muted" style="margin:0 0 28px">Checking out as a guest. <a class="link-u" href="{% url 'login' %}?next={% url 'checkout' %}">Sign in</a> to save your orders.</p>
+    {% endif %}
+    <div class="form-grid">
+      {% for field in form %}
+        <div class="float {% if field.name == 'address' or field.name == 'email' %}full{% endif %}">
+          {{ field }}<label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field.errors }}
+        </div>
+      {% endfor %}
+    </div>
+    <p class="muted" style="font-size:12px;margin:28px 0">This is a student project. No payment is taken and nothing will be shipped.</p>
+    <button class="btn" type="submit"><span>Place order</span></button>
+  </form>
+  <aside class="summary">
+    <p class="eyebrow">Your order</p>
+    {% for line in cart %}
+      <div class="summary-row"><span>{{ line.product.name }} <span class="muted">× {{ line.quantity }}</span></span><span>{{ line.line_total|money }}</span></div>
+    {% endfor %}
+    <div class="summary-row"><span>Express delivery</span><span>Complimentary</span></div>
+    <div class="summary-row total"><span>Total</span><span>{{ cart.total|money }}</span></div>
+  </aside>
+</div>
+{% endblock %}

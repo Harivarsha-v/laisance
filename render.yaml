@@ -1,0 +1,33 @@
+# Render blueprint: one web service (HTTPS) + one Postgres database.
+# MongoDB is MongoDB Atlas; paste its connection string as MONGODB_URI in the Render dashboard.
+services:
+  - type: web
+    name: laisance
+    runtime: python
+    plan: free
+    buildCommand: ./build.sh
+    startCommand: gunicorn config.wsgi:application --workers 2 --timeout 60 --access-logfile -
+    healthCheckPath: /health.json
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: DEBUG
+        value: "false"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: laisance-db
+          property: connectionString
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DB
+        value: laisance
+      - key: CURRENCY_API_TIMEOUT
+        value: "2.5"
+      - key: AI_RATE_LIMIT
+        value: "20"
+
+databases:
+  - name: laisance-db
+    plan: free

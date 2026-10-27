@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Client care · {{ BRAND_NAME }}{% endblock %}
+
+{% block content %}
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Client care</p>
+    <h1 class="display h-xl split-words" style="margin-top:14px">Questions &amp; <em>answers</em></h1>
+  </div>
+  <p class="lede" style="max-width:32ch">Everything our advisors are asked most often. Our assistant answers from these same pages, at any hour.</p>
+</header>
+
+<div class="care">
+  <nav class="care-nav" aria-label="Topics">
+    {% for topic in topics %}<a href="#{{ topic|slugify }}">{{ topic }}</a>{% endfor %}
+    <a href="{% url 'error_codes' %}">Error codes</a>
+    <a href="{% url 'contact' %}">Contact an advisor</a>
+  </nav>
+  <div class="care-body">
+    {% for topic, faqs in topics.items %}
+      <section class="care-topic reveal" id="{{ topic|slugify }}">
+        <h2 class="display h-sm">{{ topic }}</h2>
+        <div class="accordion" style="margin-top:18px">
+          {% for f in faqs %}
+            <details {% if forloop.parentloop.first and forloop.first %}open{% endif %}>
+              <summary>{{ f.question }}</summary>
+              <div class="body"><p>{{ f.answer }}</p></div>
+            </details>
+          {% endfor %}
+        </div>
+      </section>
+    {% endfor %}
+    <section class="care-cta reveal">
+      <p class="display h-md">Still <em>wondering?</em></p>
+      <p class="muted">Our assistant can answer in a moment, or open a request for a client advisor.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:22px">
+        <button class="btn" type="button" data-ask=""><span>Ask the assistant</span></button>
+        <a class="btn btn--ghost" href="{% url 'contact' %}"><span>Write to an advisor</span></a>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

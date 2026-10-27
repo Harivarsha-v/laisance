@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load store_extras %}
+{% block title %}Thank you · {{ BRAND_NAME }}{% endblock %}
+
+{% block content %}
+<section class="success">
+  <p class="eyebrow">Order No. {{ order.pk|stringformat:"05d" }}</p>
+  <h1 class="display h-xl split-words" style="margin:20px 0">Thank <em>you,</em> {{ order.full_name|cut:" "|truncatechars:20 }}.</h1>
+  <p class="lede" style="margin:0 auto">Your pieces are being prepared in our atelier and will be presented in our signature box. A confirmation is on its way to {{ order.email }}.</p>
+  <div style="max-width:520px;margin:48px auto 0;text-align:left">
+    {% for item in order.items.all %}
+      <div class="summary-row" style="border-bottom:1px solid var(--line)"><span>{{ item.product.name }} <span class="muted">· {{ item.color }} · {{ item.size }} × {{ item.quantity }}</span></span><span>{{ item.line_total|money }}</span></div>
+    {% endfor %}
+    <div class="summary-row total"><span>Total</span><span>{{ order.total|money }}</span></div>
+  </div>
+  <a class="link-u" href="{% url 'home' %}" style="margin-top:40px">Continue browsing <span class="arrow">→</span></a>
+</section>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Contact an advisor · {{ BRAND_NAME }}{% endblock %}
+
+{% block content %}
+<div class="bag" style="padding-top:clamp(40px,6vw,96px)">
+  <div>
+    <p class="eyebrow">Client care</p>
+    <h1 class="display h-lg" style="margin:14px 0 18px">Write to an <em>advisor</em></h1>
+    <p class="lede" style="margin-bottom:40px">Every message becomes a support request, answered personally within one working day.</p>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <div class="form-grid">
+        {% for field in form %}
+          <div class="float {% if field.name == 'subject' or field.name == 'message' %}full{% endif %}">
+            {{ field }}<label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}{% else %} (optional){% endif %}</label>
+            {{ field.errors }}
+          </div>
+        {% endfor %}
+      </div>
+      <button class="btn" type="submit" style="margin-top:30px"><span>Send request</span></button>
+    </form>
+  </div>
+  <aside class="summary">
+    <p class="eyebrow">Before you write</p>
+    <p class="lede" style="margin:14px 0">Our assistant answers most questions instantly, from delivery times to error codes.</p>
+    <button class="btn btn--block" type="button" data-ask=""><span>Ask the assistant</span></button>
+    <hr class="rule" style="margin:26px 0">
+    <p class="eyebrow">Le Salon</p>
+    <p class="muted" style="margin:10px 0 0">12 rue de l'Aisance, Paris<br>Tuesday to Saturday, by appointment</p>
+  </aside>
+</div>
+{% endblock %}
