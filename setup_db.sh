@@ -4,6 +4,6 @@
 set -o errexit
 : "${DATABASE_URL:?Set DATABASE_URL to the production database first}"
 python manage.py migrate --noinput
-python manage.py createcachetable
+VERCEL=1 python manage.py createcachetable  # with Vercel settings, so the database cache table is created
 python manage.py seed_store
 python manage.py seed_help

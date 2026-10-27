@@ -2,8 +2,8 @@
 
 **Task title:** L’Aisance: luxury fashion house website with an integrated AI assistant for FAQs and error codes
 
-**Live site:** https://laisance.onrender.com  <!-- replace with your Render URL after the first deploy -->
-**Health check:** https://laisance.onrender.com/health/
+**Live site:** https://laisance.vercel.app
+**Health check:** https://laisance.vercel.app/health/
 
 A responsive Django website for a fictional high-end fashion house (relaxed, fluid tailoring and cashmere).
 It has a curated seasonal collection, a private AI stylist, and an AI **client-care assistant** in a chat widget
@@ -127,13 +127,24 @@ python manage.py runserver 8002
 
 Without `MONGODB_URI`, chat logs and feedback go to `logs/*.jsonl` and `/health/` shows MongoDB as "fallback".
 
-## Deploy (Render + MongoDB Atlas)
+## Deploy (Vercel + Neon + MongoDB Atlas)
 
-1. **MongoDB Atlas:** create a free M0 cluster, a database user, and allow access from anywhere (`0.0.0.0/0`). Copy the `mongodb+srv://…` connection string.
-2. **Render:** New → Blueprint → pick this GitHub repo. `render.yaml` creates the web service (HTTPS) and a Postgres database, and generates `SECRET_KEY`.
-3. When asked, paste the Atlas string as **`MONGODB_URI`**.
-4. After the first deploy, open `/health/`. Everything should read Operational. Put the URL at the top of this README.
-5. Admin: in the Render shell run `python manage.py createsuperuser`, then sign in at `/admin/` to see tickets, FAQs and orders.
+The live site runs on **Vercel** (Python serverless functions, HTTPS), with **Neon** Postgres for the SQL data and
+**MongoDB Atlas** for chat logs and feedback. All three are on free tiers that do not expire.
+
+1. **MongoDB Atlas:** create a free M0 cluster and a database user with read/write access, and allow access from
+   anywhere (`0.0.0.0/0`). Copy the `mongodb+srv://…` connection string.
+2. **Vercel:** import this GitHub repo (Vercel detects Django). `vercel.json` routes every request to
+   `api/index.py`, the WSGI entry point. Set `DEBUG=false`, `SECRET_KEY`, `MONGODB_URI` and `MONGODB_DB=laisance`.
+3. **Neon:** in the Vercel project, Storage → Create Database → Neon (free), with the prefix `DATABASE`, so Vercel
+   sets `DATABASE_URL`.
+4. **Load the database once** from your machine: `DATABASE_URL='postgres://…' ./setup_db.sh` (migrations, cache
+   table, collection, FAQs and error codes).
+5. Open `/health/`: SQL, MongoDB and the exchange-rate API should all read Operational.
+
+On Vercel the settings switch automatically (`VERCEL` is set by the platform): rate limits and the exchange-rate
+cache use the database (serverless instances share no memory), logs go to `/tmp`, and static files are served by
+WhiteNoise straight from `static/`. `render.yaml` and `build.sh` are kept as an alternative Render deployment.
 
 Environment variables: `SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS`, `DATABASE_URL`, `MONGODB_URI`,
 `MONGODB_DB`, `CURRENCY_API_URL`, `CURRENCY_API_KEY` (optional), `CURRENCY_API_TIMEOUT`, `AI_RATE_LIMIT`, `MAINTENANCE_MODE`.
